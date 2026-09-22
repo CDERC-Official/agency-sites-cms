@@ -1,4 +1,5 @@
-import { postgresAdapter } from '@payloadcms/db-postgres'
+import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import sharp from 'sharp'
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
@@ -17,6 +18,24 @@ import { getServerSideURL } from './utilities/getURL'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+const postgresConnectionString =
+  process.env.POSTGRES_URL ||
+  process.env.POSTGRES_URL_NON_POOLING ||
+  process.env.DATABASE_URL ||
+  ''
+
+if (process.env.VERCEL && !process.env.PAYLOAD_SECRET) {
+  throw new Error(
+    'PAYLOAD_SECRET is missing at build time. Add it in Vercel → Settings → Environment Variables for Production and Preview.',
+  )
+}
+
+if (process.env.VERCEL && !postgresConnectionString) {
+  throw new Error(
+    'No Postgres URL at build time. Attach a Vercel Postgres/Neon database or set POSTGRES_URL (or DATABASE_URL) for Production and Preview.',
+  )
+}
 
 export default buildConfig({
   admin: {
@@ -57,16 +76,26 @@ export default buildConfig({
   },
   // This config helps us configure global or default features that the other editors can inherit
   editor: defaultLexical,
-  db: postgresAdapter({
+  db: vercelPostgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URL || '',
+      connectionString: postgresConnectionString,
     },
   }),
   collections: [Pages, Posts, Media, Categories, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
-  plugins,
-  secret: process.env.PAYLOAD_SECRET,
+  plugins: [
+    ...plugins,
+    ...(process.env.NODE_ENV === 'production' ? 
+      [vercelBlobStorage({
+        enabled: true,
+        collections: {
+          [Media.slug]: true,
+        },
+        token: process.env.BLOB_READ_WRITE_TOKEN || '',
+      })] : []),
+    ],
+  secret: process.env.PAYLOAD_SECRET || '',
   sharp,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
