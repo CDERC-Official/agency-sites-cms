@@ -20,7 +20,7 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 const postgresConnectionString =
-  process.env.POSTGRES_URL ||
+  process.env.STORAGE_POSTGRES_URL ||
   process.env.POSTGRES_URL_NON_POOLING ||
   process.env.DATABASE_URL ||
   ''
