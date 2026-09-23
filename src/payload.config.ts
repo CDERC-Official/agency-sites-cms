@@ -86,15 +86,18 @@ export default buildConfig({
   globals: [Header, Footer],
   plugins: [
     ...plugins,
-    ...(process.env.NODE_ENV === 'production' ? 
-      [vercelBlobStorage({
-        enabled: true,
-        collections: {
-          [Media.slug]: true,
-        },
-        token: process.env.BLOB_READ_WRITE_TOKEN || '',
-      })] : []),
-    ],
+    ...(process.env.NODE_ENV === 'production'
+      ? [
+          vercelBlobStorage({
+            enabled: true,
+            collections: {
+              [Media.slug]: true,
+            },
+            token: process.env.BLOB_MEDIA_READ_WRITE_TOKEN || '',
+          }),
+        ]
+      : []),
+  ],
   secret: process.env.PAYLOAD_SECRET || '',
   sharp,
   typescript: {
