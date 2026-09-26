@@ -1,31 +1,97 @@
-version: '3'
+x-development-build: &development-build
+  context: .
+  dockerfile: Dockerfile
+  target: development
 
 services:
-  payload:
-    image: node:18-alpine
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: agency_sites
+      POSTGRES_USER: payload
+      POSTGRES_PASSWORD: payload
     ports:
-      - '3000:3000'
+      - '127.0.0.1:5432:5432'
     volumes:
-      - .:/home/node/app
-      - node_modules:/home/node/app/node_modules
-    working_dir: /home/node/app/
-    command: sh -c "yarn install && yarn dev"
-    depends_on:
-      - mongo
-    env_file:
-      - .env
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U payload -d agency_sites']
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
-  mongo:
-    image: mongo:latest
-    ports:
-      - '27017:27017'
+  cms:
+    build: *development-build
     command:
-      - --storageEngine=wiredTiger
+      - /bin/sh
+      - -lc
+      - >-
+        pnpm --filter @liskof-digital/cms exec payload migrate
+        && pnpm --filter @liskof-digital/cms exec cross-env
+        NODE_OPTIONS=--no-deprecation next dev --hostname 0.0.0.0
+    env_file:
+      - ./apps/cms/.env.docker
+    environment:
+      DATABASE_URL: postgres://payload:payload@db:5432/agency_sites
+      NEXT_PUBLIC_SERVER_URL: http://localhost:3000
+      NODE_ENV: development
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - '127.0.0.1:3000:3000'
     volumes:
-      - data:/data/db
-    logging:
-      driver: none
+      - ./apps/cms/src:/workspace/apps/cms/src
+      - ./apps/cms/public:/workspace/apps/cms/public
+      - ./apps/cms/next.config.ts:/workspace/apps/cms/next.config.ts
+      - ./apps/cms/tsconfig.json:/workspace/apps/cms/tsconfig.json
+      - ./apps/cms/tailwind.config.mjs:/workspace/apps/cms/tailwind.config.mjs
+      - ./apps/cms/postcss.config.js:/workspace/apps/cms/postcss.config.js
+      - ./apps/cms/redirects.ts:/workspace/apps/cms/redirects.ts
+      - ./packages/design-system/src:/workspace/packages/design-system/src
+      - cms_next_build:/workspace/apps/cms/.next
+      - root_node_modules:/workspace/node_modules
+      - cms_node_modules:/workspace/apps/cms/node_modules
+      - web_node_modules:/workspace/apps/web/node_modules
+
+  web:
+    build: *development-build
+    command:
+      - pnpm
+      - --filter
+      - '@liskof-digital/web'
+      - exec
+      - nuxt
+      - dev
+      - --host
+      - 0.0.0.0
+      - --port
+      - '3001'
+    env_file:
+      - ./apps/web/.env.docker
+    environment:
+      NUXT_PUBLIC_PAYLOAD_URL: http://localhost:3000
+      NODE_ENV: development
+    ports:
+      - '127.0.0.1:3001:3001'
+    volumes:
+      - ./apps/web/app:/workspace/apps/web/app
+      - ./apps/web/nuxt.config.ts:/workspace/apps/web/nuxt.config.ts
+      - ./apps/web/tsconfig.json:/workspace/apps/web/tsconfig.json
+      - ./packages/config/nuxt.ts:/workspace/packages/config/nuxt.ts
+      - ./packages/design-system/src:/workspace/packages/design-system/src
+      - ./packages/types/src:/workspace/packages/types/src
+      - ./packages/ui/src:/workspace/packages/ui/src
+      - ./packages/utils/src:/workspace/packages/utils/src
+      - web_nuxt_build:/workspace/apps/web/.nuxt
+      - root_node_modules:/workspace/node_modules
+      - cms_node_modules:/workspace/apps/cms/node_modules
+      - web_node_modules:/workspace/apps/web/node_modules
 
 volumes:
-  data:
-  node_modules:
+  postgres_data:
+  root_node_modules:
+  cms_node_modules:
+  web_node_modules:
+  cms_next_build:
+  web_nuxt_build:

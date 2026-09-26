@@ -1,0 +1,15 @@
+@import 'tailwindcss';
+@import '@liskof-digital/design-system/tokens.css';
+
+@source '../../../../packages/ui/src';
+
+html {
+  font-family: var(--font-sans);
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  background: var(--color-brand-paper);
+  color: var(--color-brand-ink);
+}
