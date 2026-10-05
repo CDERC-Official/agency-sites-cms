@@ -1,4 +1,4 @@
-FROM node:22-bookworm-slim AS development
+FROM node:24-bookworm-slim AS development
 
 ENV COREPACK_HOME=/home/node/.cache/node/corepack
 WORKDIR /workspace

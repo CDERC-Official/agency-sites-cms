@@ -262,7 +262,7 @@ Example:
 ```ts
 export default defineNuxtConfig({
   nitro: {
-    preset: 'cloudflare'
+    preset: 'cloudflare_module'
   }
 })
 ```

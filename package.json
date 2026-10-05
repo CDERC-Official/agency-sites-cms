@@ -11,6 +11,7 @@
     "dev:cms": "turbo run dev --filter=@liskof-digital/cms",
     "dev:cms:container": "pnpm --filter @liskof-digital/cms dev:container",
     "dev:web": "turbo run dev --filter=@liskof-digital/web",
+    "dev:web:cf": "pnpm --filter @liskof-digital/web cf:dev",
     "deploy:cms": "pnpm --filter @liskof-digital/cms deploy:container",
     "deploy:web": "pnpm --filter @liskof-digital/web deploy",
     "lint": "turbo run lint",
@@ -24,7 +25,7 @@
     "turbo": "^2.11.4"
   },
   "engines": {
-    "node": ">=20.9.0",
+    "node": ">=24",
     "pnpm": "^9 || ^10 || ^11"
   },
   "pnpm": {

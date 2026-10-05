@@ -103,7 +103,7 @@ Open `/admin` and create the first user if the database is empty.
 
 ## Web: `agency-sites-web`
 
-Nuxt builds with Nitro preset `cloudflare` ([`apps/web/nuxt.config.ts`](../web/nuxt.config.ts)).
+Nuxt builds with Nitro preset `cloudflare_module` ([`apps/web/nuxt.config.ts`](../web/nuxt.config.ts)). The committed [`apps/web/wrangler.jsonc`](../web/wrangler.jsonc) is the deploy config: Worker name `agency-sites-web`, `nodejs_compat`, assets from `.output/public`, and the module entry `.output/server/index.mjs`.
 
 ### 1. Configure environment
 
@@ -116,13 +116,25 @@ Set for the Worker (dashboard or Wrangler secrets/vars):
 
 These map to Nuxt `runtimeConfig.public.payloadUrl` and `runtimeConfig.payloadApiToken`.
 
-### 2. Deploy
+### 2. Build locally, then deploy
+
+Preview the production Worker build on your machine before deploying. Wrangler reads `apps/web/.dev.vars`, not `.env.local`:
+
+```bash
+cp apps/web/.dev.vars.example apps/web/.dev.vars
+# set NUXT_PUBLIC_PAYLOAD_URL to the CMS you are testing
+pnpm dev:web:cf
+```
+
+That runs `nuxt build` and then `wrangler dev`. Deploy the same build with:
 
 ```bash
 pnpm deploy:web
 ```
 
 This builds Nuxt (`.output/`) then runs `wrangler deploy` with [`apps/web/wrangler.jsonc`](../web/wrangler.jsonc).
+
+Production and staging values belong on the Worker (dashboard or `wrangler secret put`), not in `.dev.vars`. `.dev.vars` is only for the local Wrangler process.
 
 ### 3. Custom domains
 

@@ -22,7 +22,7 @@ packages/
 
 ## Prerequisites
 
-- Node.js 20.9+
+- Node.js 24 (current Active LTS; see `.nvmrc`)
 - pnpm 10.8.1
 - PostgreSQL for the CMS
 - Docker (Compose and/or Wrangler Containers)
@@ -51,6 +51,7 @@ The first user created in the admin becomes the initial administrator.
 | ---- | --- |
 | Docker Compose | `cp apps/cms/.env.docker.example apps/cms/.env.docker` (and web), then `docker compose up --build` |
 | CMS Container parity | `cp .dev.vars.example .dev.vars`, use `host.docker.internal` in `DATABASE_URL`, then `pnpm dev:cms:container` → [http://localhost:8787](http://localhost:8787) |
+| Web Worker parity | `cp apps/web/.dev.vars.example apps/web/.dev.vars`, then `pnpm dev:web:cf` (builds Nuxt, then `wrangler dev`) |
 
 Full details: [apps/docs/local-development.md](apps/docs/local-development.md).
 
@@ -61,6 +62,7 @@ Full details: [apps/docs/local-development.md](apps/docs/local-development.md).
 | `apps/cms/.env.local` | Next.js CMS (day-to-day) |
 | `apps/web/.env.local` | Nuxt |
 | `.dev.vars` (repo root) | Wrangler CMS Container / secrets for local Worker |
+| `apps/web/.dev.vars` | Local Nuxt Worker (`pnpm dev:web:cf`); Wrangler does not read `.env.local` |
 | Cloudflare dashboard / `wrangler secret put` | Production / staging |
 
 Production CMS media uses **Cloudflare R2** (`R2_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_ENDPOINT`) when `NODE_ENV=production`. Do not commit secrets. Never prefix secrets with `NEXT_PUBLIC_` or `NUXT_PUBLIC_`.
@@ -87,6 +89,7 @@ pnpm generate:importmap
 pnpm --filter @liskof-digital/cms payload migrate
 pnpm dev:cms
 pnpm dev:web
+pnpm dev:web:cf
 pnpm deploy:cms
 pnpm deploy:web
 ```

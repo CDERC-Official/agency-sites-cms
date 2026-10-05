@@ -3,13 +3,16 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev --port 3001 --dotenv .env.local",
     "preview": "nuxt preview --port 3001",
     "postinstall": "nuxt prepare",
     "check-types": "nuxt typecheck",
-    "cf:dev": "wrangler dev",
+    "cf:dev": "nuxt build && wrangler dev",
     "deploy": "pnpm build && wrangler deploy",
     "cf:typegen": "wrangler types"
   },

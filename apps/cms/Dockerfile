@@ -1,4 +1,4 @@
-FROM node:22-bookworm-slim AS build
+FROM node:24-bookworm-slim AS build
 
 ENV COREPACK_HOME=/home/node/.cache/node/corepack
 WORKDIR /workspace
@@ -11,7 +11,7 @@ RUN pnpm install --frozen-lockfile --network-concurrency=4 --fetch-retries=5 --f
 # build process an ephemeral secret; production receives its secret at runtime.
 RUN PAYLOAD_SECRET="$(node -e 'process.stdout.write(require("node:crypto").randomBytes(32).toString("hex"))')" pnpm --filter @liskof-digital/cms build
 
-FROM node:22-bookworm-slim AS production
+FROM node:24-bookworm-slim AS production
 
 ENV NODE_ENV=production
 ENV PORT=3000
