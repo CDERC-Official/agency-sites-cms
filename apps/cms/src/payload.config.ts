@@ -1,5 +1,5 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
-import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
+import { s3Storage } from '@payloadcms/storage-s3'
 import sharp from 'sharp'
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
@@ -88,12 +88,21 @@ export default buildConfig({
     ...plugins,
     ...(process.env.NODE_ENV === 'production'
       ? [
-          vercelBlobStorage({
+          s3Storage({
             enabled: true,
             collections: {
               [Media.slug]: true,
             },
-            token: process.env.BLOB_MEDIA_READ_WRITE_TOKEN || '',
+            bucket: process.env.R2_BUCKET || '',
+            config: {
+              credentials: {
+                accessKeyId: process.env.R2_ACCESS_KEY_ID || '',
+                secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || '',
+              },
+              region: 'auto',
+              endpoint: process.env.R2_ENDPOINT,
+              forcePathStyle: true,
+            },
           }),
         ]
       : []),

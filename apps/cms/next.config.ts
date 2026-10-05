@@ -8,8 +8,9 @@ const dirname = path.dirname(fileURLToPath(import.meta.url))
 const serverURL = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
   : process.env.__NEXT_PRIVATE_ORIGIN || 'http://localhost:3000'
-
 const nextConfig: NextConfig = {
+  output: 'standalone',
+  outputFileTracingRoot: path.resolve(dirname, '../..'),
   sassOptions: { loadPaths: [path.resolve(dirname, '../../node_modules/@payloadcms/ui/dist/scss/')] },
   images: {
     localPatterns: [{ pathname: '/api/media/file/**' }],

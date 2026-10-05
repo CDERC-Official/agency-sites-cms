@@ -20,4 +20,7 @@ export default defineNuxtConfig({
       payloadUrl: 'http://localhost:3000',
     },
   },
+  nitro: {
+    preset: 'cloudflare',
+  },
 })
