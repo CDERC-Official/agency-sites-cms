@@ -6,7 +6,7 @@ How to run the Payload CMS (`apps/cms`) and Nuxt frontend (`apps/web`) on your m
 
 - Node.js 24 (current Active LTS; the repo `.nvmrc` is `24`)
 - pnpm 10.8.1 (via Corepack or the repo `packageManager` field)
-- PostgreSQL reachable locally (or via Docker Compose)
+- PostgreSQL (recommended: Compose `db` via `docker compose up -d db`; or any local instance)
 - Docker Engine (required for Compose and for Wrangler Containers)
 
 ## Which mode to use
@@ -62,7 +62,19 @@ Never commit real secrets. `.env*`, `.dev.vars`, and Docker env files are gitign
    - CMS: `DATABASE_URL`, `PAYLOAD_SECRET`, `NEXT_PUBLIC_SERVER_URL=http://localhost:3000`
    - Web: `NUXT_PUBLIC_PAYLOAD_URL=http://localhost:3000`
 
-3. Ensure PostgreSQL is running and the database exists.
+3. Start PostgreSQL with the Compose `db` service (official `postgres:16-alpine` image; no custom Dockerfile or `--build`):
+
+   ```bash
+   docker compose up -d db
+   ```
+
+   This creates the `agency_sites` database and publishes Postgres on `127.0.0.1:5432`. Data persists in the `postgres_data` volume. Point `DATABASE_URL` at:
+
+   ```text
+   postgres://payload:payload@127.0.0.1:5432/agency_sites
+   ```
+
+   Stop with `docker compose stop db`, or `docker compose down` to remove containers (the volume keeps your data unless you pass `-v`).
 
 4. Run migrations once:
 
@@ -113,7 +125,7 @@ Use this to exercise the same Worker + Container path as production.
 
 ### CMS Container
 
-1. Start PostgreSQL on the host (Compose `db` service alone, or any local Postgres). Publish port `5432` to the host.
+1. Start PostgreSQL on the host. Recommended: Compose `db` only (`docker compose up -d db`), which publishes `127.0.0.1:5432`. Any other local Postgres on that port also works.
 
 2. Copy and edit root Wrangler secrets:
 

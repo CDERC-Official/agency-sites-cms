@@ -33,9 +33,11 @@ From the repository root:
 
 ```bash
 pnpm install
+docker compose up -d db
 cp apps/cms/.env.example apps/cms/.env.local
 cp apps/web/.env.example apps/web/.env.local
-# Edit .env.local files: DATABASE_URL, PAYLOAD_SECRET, NUXT_PUBLIC_PAYLOAD_URL, etc.
+# Edit .env.local files: PAYLOAD_SECRET, NUXT_PUBLIC_PAYLOAD_URL, etc.
+# DATABASE_URL in the CMS example already matches Compose db.
 pnpm --filter @liskof-digital/cms payload migrate
 pnpm dev
 ```
