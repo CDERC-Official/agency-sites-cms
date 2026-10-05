@@ -1,0 +1,12 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "env": ["NUXT_PAYLOAD_API_TOKEN", "NUXT_PUBLIC_PAYLOAD_URL"]
+    },
+    "dev": {
+      "env": ["NUXT_PAYLOAD_API_TOKEN", "NUXT_PUBLIC_PAYLOAD_URL"]
+    }
+  }
+}

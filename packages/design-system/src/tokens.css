@@ -1,0 +1,15 @@
+@theme {
+  --color-brand-accent: #c2410c;
+  --color-brand-ink: #172033;
+  --color-brand-muted: #586174;
+  --color-brand-paper: #f8f7f4;
+  --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+  --brand-accent: #c2410c;
+  --brand-ink: #172033;
+  --brand-muted: #586174;
+  --brand-paper: #f8f7f4;
+}

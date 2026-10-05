@@ -1,0 +1,15 @@
+.git
+.next
+.nuxt
+.output
+node_modules
+**/node_modules
+**/.next
+**/.nuxt
+**/.output
+**/dist
+**/.env
+**/.env.*
+playwright-report
+test-results
+apps/cms/public/media

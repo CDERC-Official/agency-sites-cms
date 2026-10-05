@@ -1,0 +1,42 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "env": [
+        "CRON_SECRET",
+        "DATABASE_URL",
+        "NEXT_PUBLIC_SERVER_URL",
+        "PAYLOAD_SECRET",
+        "POSTGRES_URL_NON_POOLING",
+        "PREVIEW_SECRET",
+        "R2_ACCESS_KEY_ID",
+        "R2_BUCKET",
+        "R2_ENDPOINT",
+        "R2_SECRET_ACCESS_KEY",
+        "STORAGE_POSTGRES_URL",
+        "VERCEL",
+        "VERCEL_PROJECT_PRODUCTION_URL",
+        "__NEXT_PRIVATE_ORIGIN"
+      ]
+    },
+    "dev": {
+      "env": [
+        "CRON_SECRET",
+        "DATABASE_URL",
+        "NEXT_PUBLIC_SERVER_URL",
+        "PAYLOAD_SECRET",
+        "POSTGRES_URL_NON_POOLING",
+        "PREVIEW_SECRET",
+        "R2_ACCESS_KEY_ID",
+        "R2_BUCKET",
+        "R2_ENDPOINT",
+        "R2_SECRET_ACCESS_KEY",
+        "STORAGE_POSTGRES_URL",
+        "VERCEL",
+        "VERCEL_PROJECT_PRODUCTION_URL",
+        "__NEXT_PRIVATE_ORIGIN"
+      ]
+    }
+  }
+}

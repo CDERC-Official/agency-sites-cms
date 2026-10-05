@@ -1,0 +1,15 @@
+{
+  "extends": "../../packages/config/tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "plugins": [{ "name": "next" }],
+    "paths": {
+      "@payload-config": ["./src/payload.config.ts"],
+      "react": ["../../node_modules/@types/react"],
+      "@/*": ["./src/*"]
+    },
+    "incremental": true
+  },
+  "include": ["**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "../../next-env.d.ts"],
+  "exclude": ["node_modules", "worker"]
+}

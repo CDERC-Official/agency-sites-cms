@@ -1,0 +1,35 @@
+{
+  "name": "@liskof-digital/web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev --port 3001 --dotenv .env.local",
+    "preview": "nuxt preview --port 3001",
+    "postinstall": "nuxt prepare",
+    "check-types": "nuxt typecheck",
+    "cf:dev": "nuxt build && wrangler dev",
+    "deploy": "pnpm build && wrangler deploy",
+    "cf:typegen": "wrangler types"
+  },
+  "dependencies": {
+    "@liskof-digital/config": "workspace:*",
+    "@liskof-digital/design-system": "workspace:*",
+    "@liskof-digital/types": "workspace:*",
+    "@liskof-digital/ui": "workspace:*",
+    "@liskof-digital/utils": "workspace:*",
+    "nuxt": "^4.5.2",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3",
+    "vue-tsc": "^3.2.5",
+    "wrangler": "^4.146.0"
+  }
+}

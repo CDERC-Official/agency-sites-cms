@@ -1,0 +1,19 @@
+# Copy to `.dev.vars` at the repo root for `pnpm dev:cms:container`
+# (or `pnpm --filter @liskof-digital/cms dev:container`).
+# Wrangler loads this file and the Worker forwards these into the CMS container.
+
+# From inside the Cloudflare container, use host.docker.internal (not localhost)
+# to reach Postgres published on the Docker host.
+DATABASE_URL=postgresql://USER:PASSWORD@host.docker.internal:5432/DATABASE
+
+PAYLOAD_SECRET=replace-with-a-long-random-secret
+PREVIEW_SECRET=replace-with-a-long-random-secret
+CRON_SECRET=replace-with-a-long-random-secret
+NEXT_PUBLIC_SERVER_URL=http://localhost:8787
+
+# Required when NODE_ENV=production (container always runs production).
+# Leave empty for local browse-only smoke tests; set real values for media uploads.
+R2_BUCKET=
+R2_ACCESS_KEY_ID=
+R2_SECRET_ACCESS_KEY=
+R2_ENDPOINT=https://<account-id>.r2.cloudflarestorage.com
