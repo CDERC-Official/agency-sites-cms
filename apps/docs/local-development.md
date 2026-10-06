@@ -182,7 +182,9 @@ Day-to-day hot reload stays `pnpm dev:web` with `apps/web/.env.local`. Use the W
 | `pnpm dev:cms` / Compose | `http://localhost:3000` |
 | `pnpm dev:cms:container` | `http://localhost:8787` |
 
-Optional server-only token: `NUXT_PAYLOAD_API_TOKEN`.
+Optional server-only token: `NUXT_PAYLOAD_API_TOKEN`. Public collection reads (published pages/posts, categories) do not require a token.
+
+After the CMS is up, open [http://localhost:3000/admin](http://localhost:3000/admin) and use the **Seed** button (or create content manually) so Nuxt has pages, posts, and categories to display at [http://localhost:3001](http://localhost:3001).
 
 ---
 
