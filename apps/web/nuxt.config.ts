@@ -8,12 +8,32 @@ export default defineNuxtConfig({
   workspaceDir: fileURLToPath(new URL('../..', import.meta.url)),
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
+  app: {
+    head: {
+      link: [
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Syne:wght@500;600;700&display=swap',
+        },
+      ],
+    },
+  },
   vite: {
     plugins: [tailwindcss()],
   },
-  build: {
-    transpile: ['@liskof-digital/ui', '@liskof-digital/types', '@liskof-digital/utils'],
+  modules: ['@nuxt/ui'],
+  colorMode: {
+    preference: 'light',
+    fallback: 'light',
   },
+  build: {
+    transpile: [
+      '@liskof-digital/types',
+      '@liskof-digital/utils',
+      '@liskof-digital/design-system',
+    ],
+  },
+
   runtimeConfig: {
     payloadApiToken: '',
     public: {

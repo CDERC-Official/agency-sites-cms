@@ -1,3 +1,4 @@
 .cloudflare/
 dist/
 .dev.vars
+.next/

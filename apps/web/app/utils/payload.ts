@@ -29,9 +29,7 @@ function toSearchParams(query: PayloadQuery = {}): Record<string, string> {
   }
 
   if (query.select) {
-    for (const [field, include] of Object.entries(query.select)) {
-      if (include) params[`select[${field}]`] = 'true'
-    }
+    flattenSelect(query.select, 'select', params)
   }
 
   return params
@@ -44,13 +42,34 @@ function flattenWhere(
 ): void {
   if (value === null || value === undefined) return
 
-  if (typeof value !== 'object' || Array.isArray(value)) {
+  if (Array.isArray(value)) {
+    value.forEach((item, index) => {
+      flattenWhere(item, `${prefix}[${index}]`, params)
+    })
+    return
+  }
+
+  if (typeof value !== 'object') {
     params[prefix] = String(value)
     return
   }
 
   for (const [key, nested] of Object.entries(value as Record<string, unknown>)) {
     flattenWhere(nested, `${prefix}[${key}]`, params)
+  }
+}
+
+function flattenSelect(
+  value: Record<string, unknown>,
+  prefix: string,
+  params: Record<string, string>,
+): void {
+  for (const [field, include] of Object.entries(value)) {
+    if (include === true) {
+      params[`${prefix}[${field}]`] = 'true'
+    } else if (include && typeof include === 'object') {
+      flattenSelect(include as Record<string, unknown>, `${prefix}[${field}]`, params)
+    }
   }
 }
 

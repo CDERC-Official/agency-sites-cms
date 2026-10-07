@@ -1,9 +1,49 @@
 @theme {
+  /* Brand */
   --color-brand-accent: #c2410c;
   --color-brand-ink: #172033;
   --color-brand-muted: #586174;
   --color-brand-paper: #f8f7f4;
-  --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+  --color-brand-surface: #ffffff;
+  --color-brand-line: color-mix(in oklab, #172033 12%, transparent);
+
+  /* Semantic UI */
+  --color-background: var(--color-brand-paper);
+  --color-foreground: var(--color-brand-ink);
+  --color-card: var(--color-brand-surface);
+  --color-card-foreground: var(--color-brand-ink);
+  --color-primary: var(--color-brand-ink);
+  --color-primary-foreground: #ffffff;
+  --color-secondary: color-mix(in oklab, var(--color-brand-ink) 6%, white);
+  --color-secondary-foreground: var(--color-brand-ink);
+  --color-muted: color-mix(in oklab, var(--color-brand-ink) 5%, white);
+  --color-muted-foreground: var(--color-brand-muted);
+  --color-accent: color-mix(in oklab, var(--color-brand-accent) 12%, white);
+  --color-accent-foreground: var(--color-brand-accent);
+  --color-destructive: #b91c1c;
+  --color-destructive-foreground: #ffffff;
+  --color-border: var(--color-brand-line);
+  --color-input: var(--color-brand-line);
+  --color-ring: var(--color-brand-accent);
+  --color-success: #0f766e;
+  --color-warning: #b45309;
+  --color-error: #b91c1c;
+
+  /* Typography */
+  --font-sans: 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Syne', 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+
+  /* Radius & layout */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.8rem;
+  --radius-xl: 1rem;
+  --container-padding: 1rem;
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-2xl: 86rem;
 }
 
 :root {
@@ -12,4 +52,46 @@
   --brand-ink: #172033;
   --brand-muted: #586174;
   --brand-paper: #f8f7f4;
+  --brand-surface: #ffffff;
+  --brand-line: color-mix(in oklab, #172033 12%, transparent);
+  --radius: 0.8rem;
+}
+
+@layer utilities {
+  .container {
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: var(--container-padding);
+  }
+
+  @media (width >= 40rem) {
+    .container {
+      max-width: var(--breakpoint-sm);
+    }
+  }
+
+  @media (width >= 48rem) {
+    .container {
+      max-width: var(--breakpoint-md);
+      padding-inline: 2rem;
+    }
+  }
+
+  @media (width >= 64rem) {
+    .container {
+      max-width: var(--breakpoint-lg);
+    }
+  }
+
+  @media (width >= 80rem) {
+    .container {
+      max-width: var(--breakpoint-xl);
+    }
+  }
+
+  @media (width >= 86rem) {
+    .container {
+      max-width: var(--breakpoint-2xl);
+    }
+  }
 }

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { UiButton } from '@liskof-digital/ui'
 import type { SiteConfig } from '@liskof-digital/types'
 import { normalizeBaseUrl } from '@liskof-digital/utils'
 
@@ -28,42 +27,41 @@ const { data, error, pending } = await useAsyncData('home-collections', async ()
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-screen max-w-5xl flex-col gap-16 px-6 py-20">
+  <UContainer class="flex min-h-screen flex-col gap-16 py-20">
     <section class="flex flex-col justify-center gap-8">
       <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-accent">{{ site.name }}</p>
-      <h1 class="max-w-3xl text-5xl font-semibold tracking-tight sm:text-7xl">
+      <h1 class="max-w-3xl font-display text-5xl font-semibold tracking-tight sm:text-7xl">
         Content and frontend, ready to grow.
       </h1>
-      <p class="max-w-2xl text-lg leading-8 text-brand-muted">{{ site.description }}</p>
+      <p class="max-w-2xl text-lg leading-8 text-muted">{{ site.description }}</p>
       <div class="flex flex-wrap items-center gap-4">
-        <NuxtLink to="/posts">
-          <UiButton>Explore posts</UiButton>
-        </NuxtLink>
-        <a class="font-medium text-brand-ink underline decoration-brand-accent underline-offset-4" :href="`${cmsUrl}/admin`">
+        <UButton to="/posts">
+          Explore posts
+        </UButton>
+        <UButton :to="`${cmsUrl}/admin`" variant="link" color="neutral" external>
           Open CMS
-        </a>
+        </UButton>
       </div>
     </section>
 
-    <p v-if="pending" class="text-brand-muted">Loading collections…</p>
-    <p v-else-if="error" class="text-brand-muted">
-      Could not reach Payload CMS. Confirm it is running at
-      <span class="font-medium text-brand-ink">{{ cmsUrl }}</span>
-      and that content has been seeded.
-    </p>
+    <p v-if="pending" class="text-muted">Loading collections…</p>
+    <UAlert
+      v-else-if="error"
+      color="warning"
+      variant="subtle"
+      title="Could not reach Payload CMS"
+      :description="`Confirm it is running at ${cmsUrl} and that content has been seeded.`"
+    />
 
     <template v-else-if="data">
       <section class="flex flex-col gap-4">
         <h2 class="text-2xl font-semibold tracking-tight">Pages</h2>
-        <p v-if="data.pages.length === 0" class="text-brand-muted">No published pages yet.</p>
+        <p v-if="data.pages.length === 0" class="text-muted">No published pages yet.</p>
         <ul v-else class="flex flex-col gap-2">
           <li v-for="page in data.pages" :key="page.id">
-            <NuxtLink
-              class="font-medium text-brand-ink underline decoration-brand-accent underline-offset-4"
-              :to="`/pages/${page.slug}`"
-            >
+            <UButton :to="`/${page.slug}`" variant="link" color="primary">
               {{ page.title }}
-            </NuxtLink>
+            </UButton>
           </li>
         </ul>
       </section>
@@ -71,30 +69,32 @@ const { data, error, pending } = await useAsyncData('home-collections', async ()
       <section class="flex flex-col gap-4">
         <div class="flex items-baseline justify-between gap-4">
           <h2 class="text-2xl font-semibold tracking-tight">Posts</h2>
-          <NuxtLink class="text-sm font-medium text-brand-accent" to="/posts">View all</NuxtLink>
+          <UButton to="/posts" variant="link" size="sm">View all</UButton>
         </div>
-        <p v-if="data.posts.length === 0" class="text-brand-muted">No published posts yet.</p>
+        <p v-if="data.posts.length === 0" class="text-muted">No published posts yet.</p>
         <ul v-else class="flex flex-col gap-2">
           <li v-for="post in data.posts" :key="post.id">
-            <NuxtLink
-              class="font-medium text-brand-ink underline decoration-brand-accent underline-offset-4"
-              :to="`/posts/${post.slug}`"
-            >
+            <UButton :to="`/posts/${post.slug}`" variant="link" color="primary">
               {{ post.title }}
-            </NuxtLink>
+            </UButton>
           </li>
         </ul>
       </section>
 
       <section class="flex flex-col gap-4">
         <h2 class="text-2xl font-semibold tracking-tight">Categories</h2>
-        <p v-if="data.categories.length === 0" class="text-brand-muted">No categories yet.</p>
-        <ul v-else class="flex flex-wrap gap-x-4 gap-y-2">
-          <li v-for="category in data.categories" :key="category.id" class="text-brand-muted">
+        <p v-if="data.categories.length === 0" class="text-muted">No categories yet.</p>
+        <div v-else class="flex flex-wrap gap-2">
+          <UBadge
+            v-for="category in data.categories"
+            :key="category.id"
+            color="neutral"
+            variant="subtle"
+          >
             {{ category.title }}
-          </li>
-        </ul>
+          </UBadge>
+        </div>
       </section>
     </template>
-  </main>
+  </UContainer>
 </template>
