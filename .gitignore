@@ -8,9 +8,12 @@ node_modules
 .output
 next-env.d.ts
 .vercel
+/.pnpm-store/
 
 # Payload default media upload directory
 public/media/
+/apps/cms/public/media/
+/apps/web/public/media/
 
 public/robots.txt
 public/sitemap*.xml

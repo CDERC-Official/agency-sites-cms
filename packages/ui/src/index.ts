@@ -1,1 +1,8 @@
 export { default as UiButton } from './Button.vue'
+export { default as UiInput } from './Input.vue'
+export { default as UiLabel } from './Label.vue'
+export { default as UiTextarea } from './Textarea.vue'
+export { default as UiSelect } from './Select.vue'
+export { default as UiCheckbox } from './Checkbox.vue'
+export { default as UiContainer } from './Container.vue'
+export { default as UiCard } from './Card.vue'

@@ -1,4 +1,4 @@
-import type { CmsCategory, CmsPage, CmsPost, PayloadQuery } from '@liskof-digital/types'
+import type { CmsPage, CmsPost, CmsCategory, PayloadQuery } from '@liskof-digital/types'
 import { findBySlug, findCollection } from '~/utils/payload'
 
 const listSelect = {
@@ -7,6 +7,17 @@ const listSelect = {
   slug: true,
   publishedAt: true,
   meta: true,
+  _status: true,
+} as const
+
+const pageDetailSelect = {
+  id: true,
+  title: true,
+  slug: true,
+  publishedAt: true,
+  meta: true,
+  hero: true,
+  layout: true,
   _status: true,
 } as const
 
@@ -41,14 +52,21 @@ export function usePayload() {
 
   function getPageBySlug(slug: string, query: PayloadQuery = {}) {
     return findBySlug<CmsPage>('pages', slug, {
-      select: listSelect,
+      depth: 2,
+      select: pageDetailSelect,
       ...query,
     })
   }
 
   function getPostBySlug(slug: string, query: PayloadQuery = {}) {
     return findBySlug<CmsPost>('posts', slug, {
-      select: listSelect,
+      depth: 2,
+      select: {
+        ...listSelect,
+        content: true,
+        categories: true,
+        heroImage: true,
+      },
       ...query,
     })
   }

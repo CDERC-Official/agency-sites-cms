@@ -20,17 +20,19 @@ useSeoMeta({
 </script>
 
 <template>
-  <main v-if="post" class="mx-auto flex min-h-screen max-w-5xl flex-col gap-8 px-6 py-20">
+  <UContainer v-if="post" class="flex min-h-screen flex-col gap-8 py-20">
     <div class="flex flex-col gap-4">
-      <NuxtLink class="text-sm font-medium text-brand-accent" to="/posts">← Posts</NuxtLink>
-      <h1 class="text-4xl font-semibold tracking-tight sm:text-5xl">{{ post.title }}</h1>
-      <p v-if="post.publishedAt" class="text-sm text-brand-muted">
+      <UButton to="/posts" variant="link" color="primary" size="sm">
+        ← Posts
+      </UButton>
+      <h1 class="font-display text-4xl font-semibold tracking-tight sm:text-5xl">{{ post.title }}</h1>
+      <p v-if="post.publishedAt" class="text-sm text-muted">
         {{ new Date(post.publishedAt).toLocaleDateString() }}
       </p>
     </div>
-    <p v-if="post.meta?.description" class="max-w-2xl text-lg leading-8 text-brand-muted">
+    <p v-if="post.meta?.description" class="max-w-2xl text-lg leading-8 text-muted">
       {{ post.meta.description }}
     </p>
-    <p class="text-sm text-brand-muted">Slug: {{ post.slug }}</p>
-  </main>
+    <p class="text-sm text-muted">Slug: {{ post.slug }}</p>
+  </UContainer>
 </template>

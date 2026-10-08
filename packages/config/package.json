@@ -1,1 +1,7 @@
-{"name":"@liskof-digital/config","version":"1.0.0","private":true,"type":"module","exports":{"./nuxt":"./nuxt.ts","./typescript":"./tsconfig.base.json"}}
+{
+    "name":"@liskof-digital/config",
+    "version":"1.0.0",
+    "private":true,
+    "type":"module",
+    "exports":{"./nuxt":"./nuxt.ts","./typescript":"./tsconfig.base.json"}
+}

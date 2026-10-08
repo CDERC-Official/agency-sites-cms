@@ -1,1 +1,9 @@
-{"name":"@liskof-digital/utils","version":"1.0.0","private":true,"type":"module","exports":"./src/index.ts"}
+{
+    "name":"@liskof-digital/utils",
+    "version":"1.0.0",
+    "private":true,
+    "type":"module",
+    "exports":{
+        ".":"./src/index.ts"
+    }
+}
