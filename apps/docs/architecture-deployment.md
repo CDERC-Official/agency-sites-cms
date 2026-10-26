@@ -240,7 +240,7 @@ Before the first deployment, set these on the `agency-sites-cms` Worker:
 | Type | Names |
 | ---- | ----- |
 | Secrets | `DATABASE_URL`, `PAYLOAD_SECRET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` |
-| Variables | `NEXT_PUBLIC_SERVER_URL`, `R2_BUCKET`, `R2_ENDPOINT` |
+| Variables | `NEXT_PUBLIC_SERVER_URL`, `R2_BUCKET`, `R2_ENDPOINT`, optional `R2_PUBLIC_URL` |
 | Optional | `STORAGE_POSTGRES_URL`, `POSTGRES_URL_NON_POOLING`, `CRON_SECRET`, `PREVIEW_SECRET` |
 
 The Worker forwards these settings to the Container. Set secrets in the Cloudflare dashboard or with `wrangler secret put`. Do not commit production values. Deploy with `pnpm deploy:cms` from the repository; Docker must be running locally for Wrangler to build and upload the image.

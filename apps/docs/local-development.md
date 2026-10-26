@@ -92,7 +92,7 @@ Never commit real secrets. `.env*`, `.dev.vars`, and Docker env files are gitign
 
 6. Open [http://localhost:3000/admin](http://localhost:3000/admin). The first user created becomes the initial administrator.
 
-In this mode the CMS runs Next.js in development (`NODE_ENV` is not production), so R2 media storage is not required.
+In this mode the CMS runs Next.js in development (`NODE_ENV` is not production), so R2 media storage is not required. If the R2 variables are set in `apps/cms/.env.local`, uploads go to that bucket instead of local disk.
 
 ---
 
@@ -223,7 +223,7 @@ Expected on the first `dev:cms:container` run and after Dockerfile or dependency
 
 ### Media uploads fail only in the container / production
 
-Production enables Cloudflare R2 via `@payloadcms/storage-s3`. Set `R2_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, and `R2_ENDPOINT` in `.dev.vars` (local) or Worker secrets (deployed).
+Production enables Cloudflare R2 through the S3-compatible adapter in `apps/cms/src/plugins/r2Storage.ts`. Set `R2_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, and `R2_ENDPOINT` in `.dev.vars` (local) or Worker secrets (deployed). Optional `R2_PUBLIC_URL` makes image URLs point at the bucket's public domain.
 
 ### See also
 

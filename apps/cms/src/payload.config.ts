@@ -1,5 +1,4 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
-import { s3Storage } from '@payloadcms/storage-s3'
 import sharp from 'sharp'
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
@@ -13,6 +12,7 @@ import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
+import { r2Storage } from './plugins/r2Storage'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 
@@ -85,31 +85,14 @@ export default buildConfig({
   //cors: [getServerSideURL()].filter(Boolean),
   cors: ['http://localhost:3000', 'http://localhost:3001'],
   globals: [Header, Footer],
-  plugins: [
-    ...plugins,
-    ...(process.env.NODE_ENV === 'production'
-      ? [
-          s3Storage({
-            enabled: true,
-            collections: {
-              [Media.slug]: true,
-            },
-            bucket: process.env.R2_BUCKET || '',
-            config: {
-              credentials: {
-                accessKeyId: process.env.R2_ACCESS_KEY_ID || '',
-                secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || '',
-              },
-              region: 'auto',
-              endpoint: process.env.R2_ENDPOINT,
-              forcePathStyle: true,
-            },
-          }),
-        ]
-      : []),
-  ],
+  plugins: [...plugins, r2Storage()],
   secret: process.env.PAYLOAD_SECRET || '',
   sharp,
+  upload: {
+    limits: {
+      fileSize: 1024 * 1024 * 5, // 5MB
+    },
+  },
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
