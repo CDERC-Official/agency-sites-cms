@@ -10,6 +10,7 @@ interface Env {
   R2_ACCESS_KEY_ID: string
   R2_SECRET_ACCESS_KEY: string
   R2_ENDPOINT: string
+  R2_PUBLIC_URL?: string
   STORAGE_POSTGRES_URL?: string
   POSTGRES_URL_NON_POOLING?: string
   CRON_SECRET?: string
@@ -33,6 +34,7 @@ export class CmsContainer extends Container<Env> {
     R2_ACCESS_KEY_ID: env.R2_ACCESS_KEY_ID ?? '',
     R2_SECRET_ACCESS_KEY: env.R2_SECRET_ACCESS_KEY ?? '',
     R2_ENDPOINT: env.R2_ENDPOINT ?? '',
+    R2_PUBLIC_URL: env.R2_PUBLIC_URL ?? '',
     STORAGE_POSTGRES_URL: env.STORAGE_POSTGRES_URL ?? '',
     POSTGRES_URL_NON_POOLING: env.POSTGRES_URL_NON_POOLING ?? '',
     CRON_SECRET: env.CRON_SECRET ?? '',

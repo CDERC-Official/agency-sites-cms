@@ -67,7 +67,7 @@ Full details: [apps/docs/local-development.md](apps/docs/local-development.md).
 | `apps/web/.dev.vars` | Local Nuxt Worker (`pnpm dev:web:cf`); Wrangler does not read `.env.local` |
 | Cloudflare dashboard / `wrangler secret put` | Production / staging |
 
-Production CMS media uses **Cloudflare R2** (`R2_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_ENDPOINT`) when `NODE_ENV=production`. Do not commit secrets. Never prefix secrets with `NEXT_PUBLIC_` or `NUXT_PUBLIC_`.
+Production CMS media uses **Cloudflare R2** (`R2_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_ENDPOINT`). Optional `R2_PUBLIC_URL` is the bucket's public domain so image URLs point at R2 directly. The same keys are used in local dev when they are set. Do not commit secrets. Never prefix secrets with `NEXT_PUBLIC_` or `NUXT_PUBLIC_`.
 
 ## Deploy to Cloudflare
 

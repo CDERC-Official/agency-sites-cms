@@ -70,6 +70,7 @@ Set plain variables in the Cloudflare dashboard for Worker `agency-sites-cms`, o
 | `NEXT_PUBLIC_SERVER_URL` | `https://cms.example.com` |
 | `R2_BUCKET` | your bucket name |
 | `R2_ENDPOINT` | `https://<account-id>.r2.cloudflarestorage.com` |
+| `R2_PUBLIC_URL` | optional public bucket URL, e.g. `https://media.example.com` |
 
 Optional: `STORAGE_POSTGRES_URL`, `POSTGRES_URL_NON_POOLING` (Payload prefers these over `DATABASE_URL` when set).
 
@@ -149,7 +150,7 @@ Attach tenant or marketing domains to Worker `agency-sites-web`. The Worker reso
 | Type | Names |
 | ---- | ----- |
 | Secrets | `DATABASE_URL`, `PAYLOAD_SECRET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` |
-| Variables | `NEXT_PUBLIC_SERVER_URL`, `R2_BUCKET`, `R2_ENDPOINT` |
+| Variables | `NEXT_PUBLIC_SERVER_URL`, `R2_BUCKET`, `R2_ENDPOINT`, optional `R2_PUBLIC_URL` |
 | Optional | `STORAGE_POSTGRES_URL`, `POSTGRES_URL_NON_POOLING`, `CRON_SECRET`, `PREVIEW_SECRET` |
 
 ### Web Worker

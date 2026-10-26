@@ -84,6 +84,21 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
         .map(([, value]) => `(max-width: ${value}px) ${value * 2}w`)
         .join(', ')
 
+  if (typeof src === 'string' && /^https?:\/\//.test(src)) {
+    return (
+      <picture className={cn(pictureClassName)}>
+        <img
+          alt={alt || ''}
+          className={cn(imgClassName, fill && 'h-full w-full object-cover')}
+          height={!fill ? height : undefined}
+          loading={loading}
+          src={src}
+          width={!fill ? width : undefined}
+        />
+      </picture>
+    )
+  }
+
   return (
     <picture className={cn(pictureClassName)}>
       <NextImage
