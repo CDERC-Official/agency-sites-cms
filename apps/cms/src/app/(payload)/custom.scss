@@ -1,0 +1,211 @@
+@import '../../../../../packages/design-system/src/admin-tokens.css';
+
+:root {
+  --theme-bg: var(--admin-background);
+  --theme-input-bg: var(--admin-surface);
+  --theme-text: var(--admin-text);
+  --theme-overlay: rgb(23 41 55 / 45%);
+  --font-body: var(--font-admin-sans);
+  --style-radius-s: var(--admin-radius-control);
+  --style-radius-m: var(--admin-radius-control);
+  --style-radius-l: var(--admin-radius-card);
+
+  --theme-elevation-0: var(--admin-surface);
+  --theme-elevation-50: color-mix(in srgb, var(--admin-text) 4%, var(--admin-surface));
+  --theme-elevation-100: color-mix(in srgb, var(--admin-text) 7%, var(--admin-surface));
+  --theme-elevation-150: color-mix(in srgb, var(--admin-text) 12%, var(--admin-surface));
+  --theme-elevation-200: color-mix(in srgb, var(--admin-text) 18%, var(--admin-surface));
+  --theme-elevation-250: color-mix(in srgb, var(--admin-text) 26%, var(--admin-surface));
+  --theme-elevation-300: color-mix(in srgb, var(--admin-text) 34%, var(--admin-surface));
+  --theme-elevation-350: color-mix(in srgb, var(--admin-text) 44%, var(--admin-surface));
+  --theme-elevation-400: var(--admin-muted);
+  --theme-elevation-450: color-mix(in srgb, var(--admin-text) 55%, var(--admin-muted));
+  --theme-elevation-500: color-mix(in srgb, var(--admin-text) 68%, var(--admin-muted));
+  --theme-elevation-550: color-mix(in srgb, var(--admin-text) 78%, var(--admin-muted));
+  --theme-elevation-600: color-mix(in srgb, var(--admin-text) 86%, black);
+  --theme-elevation-650: color-mix(in srgb, var(--admin-text) 92%, black);
+  --theme-elevation-700: var(--admin-text);
+  --theme-elevation-750: var(--admin-text);
+  --theme-elevation-800: var(--admin-text);
+  --theme-elevation-850: color-mix(in srgb, var(--admin-text) 90%, black);
+  --theme-elevation-900: color-mix(in srgb, var(--admin-text) 82%, black);
+  --theme-elevation-950: color-mix(in srgb, var(--admin-text) 74%, black);
+  --theme-elevation-1000: color-mix(in srgb, var(--admin-text) 66%, black);
+
+  --theme-success-50: var(--admin-published-soft);
+  --theme-success-100: var(--admin-published-soft);
+  --theme-success-150: var(--admin-published-soft);
+  --theme-success-200: color-mix(in srgb, var(--admin-published) 22%, white);
+  --theme-success-250: color-mix(in srgb, var(--admin-published) 30%, white);
+  --theme-success-300: color-mix(in srgb, var(--admin-published) 42%, white);
+  --theme-success-350: color-mix(in srgb, var(--admin-published) 52%, white);
+  --theme-success-400: color-mix(in srgb, var(--admin-published) 68%, white);
+  --theme-success-450: color-mix(in srgb, var(--admin-published) 82%, white);
+  --theme-success-500: var(--admin-published);
+  --theme-success-550: var(--admin-published);
+  --theme-success-600: var(--admin-published);
+  --theme-success-650: color-mix(in srgb, var(--admin-published) 88%, black);
+  --theme-success-700: color-mix(in srgb, var(--admin-published) 80%, black);
+  --theme-success-750: color-mix(in srgb, var(--admin-published) 72%, black);
+  --theme-success-800: var(--admin-published);
+  --theme-success-850: color-mix(in srgb, var(--admin-published) 70%, black);
+  --theme-success-900: color-mix(in srgb, var(--admin-published) 60%, black);
+  --theme-success-950: color-mix(in srgb, var(--admin-published) 48%, black);
+
+  --theme-warning-50: var(--admin-draft-soft);
+  --theme-warning-100: var(--admin-draft-soft);
+  --theme-warning-150: var(--admin-draft-soft);
+  --theme-warning-200: color-mix(in srgb, var(--admin-draft) 18%, white);
+  --theme-warning-250: color-mix(in srgb, var(--admin-draft) 26%, white);
+  --theme-warning-300: color-mix(in srgb, var(--admin-draft) 38%, white);
+  --theme-warning-350: color-mix(in srgb, var(--admin-draft) 48%, white);
+  --theme-warning-400: color-mix(in srgb, var(--admin-draft) 64%, white);
+  --theme-warning-450: color-mix(in srgb, var(--admin-draft) 80%, white);
+  --theme-warning-500: var(--admin-draft);
+  --theme-warning-550: var(--admin-draft);
+  --theme-warning-600: var(--admin-draft);
+  --theme-warning-650: color-mix(in srgb, var(--admin-draft) 88%, black);
+  --theme-warning-700: color-mix(in srgb, var(--admin-draft) 80%, black);
+  --theme-warning-750: color-mix(in srgb, var(--admin-draft) 72%, black);
+  --theme-warning-800: var(--admin-draft);
+  --theme-warning-850: color-mix(in srgb, var(--admin-draft) 70%, black);
+  --theme-warning-900: color-mix(in srgb, var(--admin-draft) 60%, black);
+  --theme-warning-950: color-mix(in srgb, var(--admin-draft) 48%, black);
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --theme-bg: var(--admin-dark-bg);
+  --theme-input-bg: var(--admin-dark-surface);
+  --theme-text: var(--admin-dark-text);
+  --theme-overlay: rgb(8 16 24 / 75%);
+
+  --theme-elevation-0: var(--admin-dark-surface);
+  --theme-elevation-50: #1c3144;
+  --theme-elevation-100: #243b50;
+  --theme-elevation-150: #2d4760;
+  --theme-elevation-200: #38556e;
+  --theme-elevation-250: #44627c;
+  --theme-elevation-300: #527087;
+  --theme-elevation-350: #627e94;
+  --theme-elevation-400: #7b93a6;
+  --theme-elevation-450: #8ea4b5;
+  --theme-elevation-500: #a1b4c2;
+  --theme-elevation-550: #b3c2cd;
+  --theme-elevation-600: #c4d0d8;
+  --theme-elevation-650: #d3dce2;
+  --theme-elevation-700: #e0e6ea;
+  --theme-elevation-750: #e8eef1;
+  --theme-elevation-800: var(--admin-dark-text);
+  --theme-elevation-850: #f5f8f7;
+  --theme-elevation-900: #f8fafa;
+  --theme-elevation-950: #fbfcfc;
+  --theme-elevation-1000: #ffffff;
+}
+
+html,
+body {
+  font-family: var(--font-admin-sans);
+}
+
+.nav {
+  background: var(--admin-primary);
+  color: #fff;
+  border-right-color: rgb(0 0 0 / 18%);
+
+  .nav__link,
+  .nav__label,
+  .nav-group__toggle,
+  .nav-group__toggle:hover,
+  .nav-group__toggle:focus-visible,
+  .nav__controls,
+  .nav__log-out {
+    color: #fff;
+  }
+
+  .nav__label,
+  .nav-group__toggle {
+    color: rgb(255 255 255 / 68%);
+  }
+
+  .nav__link {
+    align-items: center;
+    border-radius: var(--admin-radius-control);
+    display: flex;
+    gap: 0.55rem;
+    margin-inline: -0.35rem;
+    padding-inline: 0.7rem;
+    text-decoration: none;
+  }
+
+  .nav__link-icon {
+    color: rgb(255 255 255 / 82%);
+    flex-shrink: 0;
+    height: 1.1rem;
+    width: 1.1rem;
+  }
+
+  .nav__link:has(.nav__link-indicator) .nav__link-icon,
+  .nav__link.active .nav__link-icon {
+    color: #fff;
+  }
+
+  a.nav__link:hover,
+  a.nav__link:focus-visible {
+    background: rgb(255 255 255 / 10%);
+    text-decoration: none;
+  }
+
+  .nav__link.active,
+  .nav__link:has(.nav__link-indicator) {
+    background: rgb(255 255 255 / 16%);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .nav__link-indicator {
+    display: none;
+  }
+
+  .nav-group__indicator svg .stroke,
+  .nav-group__toggle:hover .stroke,
+  .nav-group__toggle:focus-visible .stroke,
+  .nav__controls .stroke {
+    stroke: #fff;
+  }
+}
+
+.btn--style-primary {
+  --color: #fff;
+  --bg-color: var(--admin-primary);
+  --hover-bg: var(--admin-primary-hover);
+  --hover-color: #fff;
+}
+
+.btn--style-secondary {
+  --color: var(--theme-text);
+  --bg-color: var(--theme-elevation-0);
+  --btn-border: 1px solid var(--theme-elevation-150);
+  --hover-bg: var(--theme-elevation-50);
+  --hover-color: var(--theme-text);
+  --hover-btn-border: 1px solid var(--theme-elevation-250);
+}
+
+.pill {
+  border-radius: var(--admin-radius-control);
+}
+
+.pill--style-success {
+  background: var(--admin-published-soft);
+  color: var(--admin-published);
+}
+
+.pill--style-warning {
+  background: var(--admin-draft-soft);
+  color: var(--admin-draft);
+}
+
+.pill--style-light-gray {
+  background: var(--admin-archived-soft);
+  color: var(--admin-archived);
+}

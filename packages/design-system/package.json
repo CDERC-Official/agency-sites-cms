@@ -3,5 +3,5 @@
     "version":"1.0.0",
     "private":true,
     "type":"module",
-    "exports":{".":"./src/index.ts","./tokens.css":"./src/tokens.css"}
+    "exports":{"./admin-tokens.css":"./src/admin-tokens.css",".":"./src/index.ts","./tokens.css":"./src/tokens.css"}
 }

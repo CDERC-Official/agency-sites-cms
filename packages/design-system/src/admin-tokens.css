@@ -1,0 +1,48 @@
+@font-face {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('./fonts/inter-latin-wght-normal.woff2') format('woff2');
+}
+
+:root {
+  --admin-primary: #215073;
+  --admin-primary-hover: #1a4060;
+  --admin-secondary: #d0b364;
+  --admin-background: #f1f5f4;
+  --admin-surface: #ffffff;
+  --admin-text: #172937;
+  --admin-muted: #687280;
+  --admin-published: #1f7a4d;
+  --admin-published-soft: #e5f6ec;
+  --admin-draft: #a16207;
+  --admin-draft-soft: #fbf3d5;
+  --admin-archived: #687280;
+  --admin-archived-soft: #eef1f4;
+  --admin-radius-control: 0.5rem;
+  --admin-radius-card: 0.75rem;
+  --font-admin-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  --admin-dark-bg: #0f1c27;
+  --admin-dark-surface: #152838;
+  --admin-dark-text: var(--admin-background);
+}
+
+@theme inline {
+  --color-admin-primary: var(--admin-primary);
+  --color-admin-secondary: var(--admin-secondary);
+  --color-admin-background: var(--admin-background);
+  --color-admin-surface: var(--admin-surface);
+  --color-admin-text: var(--admin-text);
+  --color-admin-muted: var(--admin-muted);
+  --color-admin-published: var(--admin-published);
+  --color-admin-published-soft: var(--admin-published-soft);
+  --color-admin-draft: var(--admin-draft);
+  --color-admin-draft-soft: var(--admin-draft-soft);
+  --color-admin-archived: var(--admin-archived);
+  --color-admin-archived-soft: var(--admin-archived-soft);
+  --font-admin: var(--font-admin-sans);
+  --radius-admin-control: var(--admin-radius-control);
+  --radius-admin-card: var(--admin-radius-card);
+}
