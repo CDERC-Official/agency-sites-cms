@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@cloudflare/containers": "^0.3.7",
+    "@heroicons/react": "^2.2.0",
     "@liskof-digital/design-system": "workspace:*",
     "@payloadcms/admin-bar": "3.89.0",
     "@payloadcms/db-postgres": "3.89.0",

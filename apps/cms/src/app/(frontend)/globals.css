@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 @import '@liskof-digital/design-system/tokens.css';
+@import '@liskof-digital/design-system/admin-tokens.css';
+/* Admin palette utilities: bg-admin-primary, text-admin-muted, font-admin, rounded-admin-card. */
 @import 'tw-animate-css';
 
 @config '../../../tailwind.config.mjs';
