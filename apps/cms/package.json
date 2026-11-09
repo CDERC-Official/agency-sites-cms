@@ -31,6 +31,7 @@
     "@payloadcms/live-preview-react": "3.89.0",
     "@payloadcms/next": "3.89.0",
     "@payloadcms/plugin-form-builder": "3.89.0",
+    "@payloadcms/plugin-multi-tenant": "^3.93.0",
     "@payloadcms/plugin-nested-docs": "3.89.0",
     "@payloadcms/plugin-redirects": "3.89.0",
     "@payloadcms/plugin-search": "3.89.0",
