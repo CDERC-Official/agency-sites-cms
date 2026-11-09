@@ -13,7 +13,7 @@ const actions = [
   { label: 'Create a page', href: '/admin/collections/pages' },
   { label: 'Upload media', href: '/admin/collections/media' },
   { label: 'Manage posts', href: '/admin/collections/posts' },
-  { label: 'Header settings', href: '/admin/globals/header' },
+  { label: 'Site settings', href: '/admin/globals/site-settings' },
 ]
 
 function getGreeting(name?: string | null) {

@@ -20,7 +20,7 @@ const collections: CollectionSlug[] = [
   'search',
 ]
 
-const globals: GlobalSlug[] = ['header', 'footer']
+const navGlobals: GlobalSlug[] = ['header', 'footer']
 
 const categories = ['Technology', 'News', 'Finance', 'Design', 'Software', 'Engineering']
 
@@ -44,8 +44,8 @@ export const seed = async ({
   payload.logger.info(`— Clearing collections and globals...`)
 
   // clear the database
-  await Promise.all(
-    globals.map((global) =>
+  await Promise.all([
+    ...navGlobals.map((global) =>
       payload.updateGlobal({
         slug: global,
         data: {
@@ -57,7 +57,32 @@ export const seed = async ({
         },
       }),
     ),
-  )
+    payload.updateGlobal({
+      slug: 'site-settings',
+      data: {
+        businessName: 'Agency Site',
+        tagline: null,
+        logo: null,
+        favicon: null,
+        contact: {
+          email: null,
+          phone: null,
+          address: null,
+          website: null,
+        },
+        design: {
+          brandColor: '#172033',
+          accentColor: '#c2410c',
+          headingFont: 'Syne',
+          bodyFont: 'Source Sans 3',
+        },
+      },
+      depth: 0,
+      context: {
+        disableRevalidate: true,
+      },
+    }),
+  ])
 
   await Promise.all(
     collections.map((collection) => payload.db.deleteMany({ collection, req, where: {} })),
@@ -270,6 +295,26 @@ export const seed = async ({
             },
           },
         ],
+      },
+    }),
+    payload.updateGlobal({
+      slug: 'site-settings',
+      data: {
+        businessName: 'Payload',
+        tagline: 'A modern website for your business',
+        logo: imageHomeDoc.id,
+        contact: {
+          email: 'hello@example.com',
+          phone: '+1 (555) 000-0000',
+          address: '123 Main Street\nCity, ST 00000',
+          website: 'https://payloadcms.com',
+        },
+        design: {
+          brandColor: '#172033',
+          accentColor: '#c2410c',
+          headingFont: 'Syne',
+          bodyFont: 'Source Sans 3',
+        },
       },
     }),
   ])

@@ -11,6 +11,7 @@ import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
+import { SiteSettings } from './SiteSettings/config'
 import { plugins } from './plugins'
 import { r2Storage } from './plugins/r2Storage'
 import { defaultLexical } from '@/fields/defaultLexical'
@@ -89,7 +90,7 @@ export default buildConfig({
   collections: [Pages, Posts, Media, Categories, Users],
   //cors: [getServerSideURL()].filter(Boolean),
   cors: ['http://localhost:3000', 'http://localhost:3001'],
-  globals: [Header, Footer],
+  globals: [SiteSettings, Header, Footer],
   plugins: [...plugins, r2Storage()],
   secret: process.env.PAYLOAD_SECRET || '',
   sharp,

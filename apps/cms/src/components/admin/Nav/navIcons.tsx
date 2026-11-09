@@ -2,6 +2,7 @@ import type { ComponentType, SVGProps } from 'react'
 import {
   Bars3BottomLeftIcon,
   Bars3Icon,
+  Cog6ToothIcon,
   DocumentTextIcon,
   NewspaperIcon,
   PhotoIcon,
@@ -17,6 +18,7 @@ export const navIcons: Record<string, HeroIcon> = {
   media: PhotoIcon,
   categories: TagIcon,
   users: UsersIcon,
+  'site-settings': Cog6ToothIcon,
   header: Bars3Icon,
   footer: Bars3BottomLeftIcon,
 }
