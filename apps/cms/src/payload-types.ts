@@ -110,10 +110,12 @@ export interface Config {
   };
   fallbackLocale: null;
   globals: {
+    'site-settings': SiteSetting;
     header: Header;
     footer: Footer;
   };
   globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
   };
@@ -1624,6 +1626,49 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  businessName: string;
+  /**
+   * Short line shown under the business name where used.
+   */
+  tagline?: string | null;
+  logo?: (number | null) | Media;
+  /**
+   * Square image recommended (e.g. 32×32 or 180×180).
+   */
+  favicon?: (number | null) | Media;
+  contact?: {
+    email?: string | null;
+    phone?: string | null;
+    address?: string | null;
+    website?: string | null;
+  };
+  design?: {
+    /**
+     * Primary brand / ink color.
+     */
+    brandColor?: string | null;
+    /**
+     * Used for CTAs and highlights.
+     */
+    accentColor?: string | null;
+    /**
+     * Display / heading font family name.
+     */
+    headingFont?: string | null;
+    /**
+     * Body / UI font family name.
+     */
+    bodyFont?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header".
  */
 export interface Header {
@@ -1679,6 +1724,35 @@ export interface Footer {
     | null;
   updatedAt?: string | null;
   createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  businessName?: T;
+  tagline?: T;
+  logo?: T;
+  favicon?: T;
+  contact?:
+    | T
+    | {
+        email?: T;
+        phone?: T;
+        address?: T;
+        website?: T;
+      };
+  design?:
+    | T
+    | {
+        brandColor?: T;
+        accentColor?: T;
+        headingFont?: T;
+        bodyFont?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
