@@ -13,7 +13,7 @@ const actions = [
   { label: 'Create a page', href: '/admin/collections/pages' },
   { label: 'Upload media', href: '/admin/collections/media' },
   { label: 'Manage posts', href: '/admin/collections/posts' },
-  { label: 'Site settings', href: '/admin/globals/site-settings' },
+  { label: 'Site settings', href: '/admin/collections/site-settings' },
 ]
 
 function getGreeting(name?: string | null) {
@@ -43,6 +43,33 @@ function mapRecentDocs(
   }))
 }
 
+const emptyFindResult = {
+  docs: [] as Array<Pick<Page | Post, 'id' | 'title' | '_status' | 'updatedAt'>>,
+  totalDocs: 0,
+}
+
+async function safeFind<T>(
+  operation: () => Promise<T>,
+  fallback: T,
+): Promise<T> {
+  try {
+    return await operation()
+  } catch (error) {
+    // Multi-tenant access returns Forbidden when the user has no roles/tenants.
+    // Keep the admin dashboard usable instead of crashing the whole view.
+    if (
+      error &&
+      typeof error === 'object' &&
+      'status' in error &&
+      (error as { status?: number }).status === 403
+    ) {
+      return fallback
+    }
+
+    throw error
+  }
+}
+
 export async function AgencyDashboard({ payload, user }: ServerProps) {
   const access = {
     overrideAccess: false as const,
@@ -57,58 +84,82 @@ export async function AgencyDashboard({ payload, user }: ServerProps) {
     recentPages,
     recentPosts,
   ] = await Promise.all([
-    payload.find({
-      collection: 'pages',
-      where: { _status: { equals: 'published' } },
-      limit: 0,
-      depth: 0,
-      ...access,
-    }),
-    payload.find({
-      collection: 'categories',
-      limit: 0,
-      depth: 0,
-      ...access,
-    }),
-    payload.find({
-      collection: 'posts',
-      where: { _status: { equals: 'published' } },
-      limit: 0,
-      depth: 0,
-      ...access,
-    }),
-    payload.find({
-      collection: 'media',
-      limit: 0,
-      depth: 0,
-      ...access,
-    }),
-    payload.find({
-      collection: 'pages',
-      draft: true,
-      limit: 4,
-      sort: '-updatedAt',
-      depth: 0,
-      select: {
-        title: true,
-        _status: true,
-        updatedAt: true,
-      },
-      ...access,
-    }),
-    payload.find({
-      collection: 'posts',
-      draft: true,
-      limit: 4,
-      sort: '-updatedAt',
-      depth: 0,
-      select: {
-        title: true,
-        _status: true,
-        updatedAt: true,
-      },
-      ...access,
-    }),
+    safeFind(
+      () =>
+        payload.find({
+          collection: 'pages',
+          where: { _status: { equals: 'published' } },
+          limit: 0,
+          depth: 0,
+          ...access,
+        }),
+      emptyFindResult,
+    ),
+    safeFind(
+      () =>
+        payload.find({
+          collection: 'categories',
+          limit: 0,
+          depth: 0,
+          ...access,
+        }),
+      emptyFindResult,
+    ),
+    safeFind(
+      () =>
+        payload.find({
+          collection: 'posts',
+          where: { _status: { equals: 'published' } },
+          limit: 0,
+          depth: 0,
+          ...access,
+        }),
+      emptyFindResult,
+    ),
+    safeFind(
+      () =>
+        payload.find({
+          collection: 'media',
+          limit: 0,
+          depth: 0,
+          ...access,
+        }),
+      emptyFindResult,
+    ),
+    safeFind(
+      () =>
+        payload.find({
+          collection: 'pages',
+          draft: true,
+          limit: 4,
+          sort: '-updatedAt',
+          depth: 0,
+          select: {
+            title: true,
+            _status: true,
+            updatedAt: true,
+          },
+          ...access,
+        }),
+      emptyFindResult,
+    ),
+    safeFind(
+      () =>
+        payload.find({
+          collection: 'posts',
+          draft: true,
+          limit: 4,
+          sort: '-updatedAt',
+          depth: 0,
+          select: {
+            title: true,
+            _status: true,
+            updatedAt: true,
+          },
+          ...access,
+        }),
+      emptyFindResult,
+    ),
   ])
 
   const overview: OverviewStat[] = [

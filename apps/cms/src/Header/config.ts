@@ -1,12 +1,21 @@
-import type { GlobalConfig } from 'payload'
+import type { CollectionConfig } from 'payload'
 
+import { anyone } from '@/access/anyone'
+import { superAdminOrTenantAdminAccess } from '@/access/superAdminOrTenantAdmin'
 import { link } from '@/fields/link'
 import { revalidateHeader } from './hooks/revalidateHeader'
 
-export const Header: GlobalConfig = {
+export const Header: CollectionConfig = {
   slug: 'header',
+  labels: {
+    singular: 'Header',
+    plural: 'Header',
+  },
   access: {
-    read: () => true,
+    create: superAdminOrTenantAdminAccess,
+    delete: superAdminOrTenantAdminAccess,
+    read: anyone,
+    update: superAdminOrTenantAdminAccess,
   },
   fields: [
     {

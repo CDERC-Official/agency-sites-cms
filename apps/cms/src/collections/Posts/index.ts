@@ -9,8 +9,9 @@ import {
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 
-import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
+import { superAdminOrTenantAdminAccess } from '@/access/superAdminOrTenantAdmin'
+import { ensureUniqueSlug } from './hooks/ensureUniqueSlug'
 import { Banner } from '../../blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
@@ -30,10 +31,10 @@ import { slugField } from 'payload'
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
   access: {
-    create: authenticated,
-    delete: authenticated,
+    create: superAdminOrTenantAdminAccess,
+    delete: superAdminOrTenantAdminAccess,
     read: authenticatedOrPublished,
-    update: authenticated,
+    update: superAdminOrTenantAdminAccess,
   },
   // This config controls what's populated by default when a post is referenced
   // https://payloadcms.com/docs/queries/select#defaultpopulate-collection-config-property
@@ -214,7 +215,21 @@ export const Posts: CollectionConfig<'posts'> = {
         },
       ],
     },
-    slugField(),
+    slugField({
+      disableUnique: true,
+      overrides: (field) => {
+        const slug = field.fields.find(
+          (f): f is import('payload').TextField => 'name' in f && f.name === 'slug',
+        )
+        if (slug) {
+          slug.hooks = {
+            ...(slug.hooks || {}),
+            beforeValidate: [ensureUniqueSlug],
+          }
+        }
+        return field
+      },
+    }),
   ],
   hooks: {
     afterChange: [revalidatePost],

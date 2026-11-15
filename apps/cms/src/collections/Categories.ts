@@ -1,16 +1,16 @@
 import type { CollectionConfig } from 'payload'
 
 import { anyone } from '../access/anyone'
-import { authenticated } from '../access/authenticated'
+import { superAdminOrTenantAdminAccess } from '@/access/superAdminOrTenantAdmin'
 import { slugField } from 'payload'
 
 export const Categories: CollectionConfig = {
   slug: 'categories',
   access: {
-    create: authenticated,
-    delete: authenticated,
+    create: superAdminOrTenantAdminAccess,
+    delete: superAdminOrTenantAdminAccess,
     read: anyone,
-    update: authenticated,
+    update: superAdminOrTenantAdminAccess,
   },
   admin: {
     useAsTitle: 'title',
@@ -22,6 +22,7 @@ export const Categories: CollectionConfig = {
       required: true,
     },
     slugField({
+      disableUnique: true,
       position: undefined,
     }),
   ],

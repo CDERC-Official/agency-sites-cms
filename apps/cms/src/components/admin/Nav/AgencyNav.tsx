@@ -2,7 +2,7 @@ import { NavHamburger, NavWrapper } from '@payloadcms/next/client'
 import { Logout } from '@payloadcms/ui'
 import { RenderServerComponent } from '@payloadcms/ui/elements/RenderServerComponent'
 import { EntityType, groupNavItems } from '@payloadcms/ui/shared'
-import type { NavPreferences, ServerProps } from 'payload'
+import type { NavPreferences, Payload, ServerProps, TypedUser } from 'payload'
 import { PREFERENCE_KEYS } from 'payload/shared'
 import { cache } from 'react'
 import React from 'react'
@@ -11,26 +11,33 @@ import { AgencyNavClient } from './AgencyNavClient'
 
 const baseClass = 'nav'
 
-const getNavPrefs = cache(async (req: ServerProps['req']): Promise<NavPreferences | null> => {
-  if (!req?.user?.collection) return null
+const getNavPrefs = cache(
+  async ({
+    payload,
+    user,
+  }: {
+    payload: Payload
+    user?: TypedUser | null
+  }): Promise<NavPreferences | null> => {
+    if (!user?.collection) return null
 
-  const result = await req.payload.find({
-    collection: 'payload-preferences',
-    depth: 0,
-    limit: 1,
-    pagination: false,
-    req,
-    where: {
-      and: [
-        { key: { equals: PREFERENCE_KEYS.NAV } },
-        { 'user.relationTo': { equals: req.user.collection } },
-        { 'user.value': { equals: req.user.id } },
-      ],
-    },
-  })
+    const result = await payload.find({
+      collection: 'payload-preferences',
+      depth: 0,
+      limit: 1,
+      pagination: false,
+      where: {
+        and: [
+          { key: { equals: PREFERENCE_KEYS.NAV } },
+          { 'user.relationTo': { equals: user.collection } },
+          { 'user.value': { equals: user.id } },
+        ],
+      },
+    })
 
-  return (result?.docs?.[0]?.value as NavPreferences | undefined) ?? null
-})
+    return (result?.docs?.[0]?.value as NavPreferences | undefined) ?? null
+  },
+)
 
 export async function AgencyNav(props: ServerProps) {
   const {
@@ -40,7 +47,6 @@ export async function AgencyNav(props: ServerProps) {
     params,
     payload,
     permissions,
-    req,
     searchParams,
     user,
     viewType,
@@ -70,13 +76,13 @@ export async function AgencyNav(props: ServerProps) {
       ...collections
         .filter(({ slug }) => visibleEntities.collections.includes(slug))
         .map((collection) => ({
-          type: EntityType.collection,
+          type: EntityType.collection as const,
           entity: collection,
         })),
-      ...globals
+      ...(globals ?? [])
         .filter(({ slug }) => visibleEntities.globals.includes(slug))
         .map((global) => ({
-          type: EntityType.global,
+          type: EntityType.global as const,
           entity: global,
         })),
     ],
@@ -84,7 +90,7 @@ export async function AgencyNav(props: ServerProps) {
     i18n,
   )
 
-  const navPreferences = await getNavPrefs(req)
+  const navPreferences = await getNavPrefs({ payload, user })
 
   const sharedServerProps = {
     i18n,

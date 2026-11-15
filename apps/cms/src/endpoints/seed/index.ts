@@ -1,4 +1,4 @@
-import type { CollectionSlug, GlobalSlug, Payload, PayloadRequest, File } from 'payload'
+import type { CollectionSlug, Payload, PayloadRequest, File } from 'payload'
 
 import { contactForm as contactFormData } from './contact-form'
 import { contact as contactPageData } from './contact-page'
@@ -18,9 +18,10 @@ const collections: CollectionSlug[] = [
   'forms',
   'form-submissions',
   'search',
+  'header',
+  'footer',
+  'site-settings',
 ]
-
-const navGlobals: GlobalSlug[] = ['header', 'footer']
 
 const categories = ['Technology', 'News', 'Finance', 'Design', 'Software', 'Engineering']
 
@@ -37,52 +38,7 @@ export const seed = async ({
 }): Promise<void> => {
   payload.logger.info('Seeding database...')
 
-  // we need to clear the media directory before seeding
-  // as well as the collections and globals
-  // this is because while `yarn seed` drops the database
-  // the custom `/api/seed` endpoint does not
-  payload.logger.info(`— Clearing collections and globals...`)
-
-  // clear the database
-  await Promise.all([
-    ...navGlobals.map((global) =>
-      payload.updateGlobal({
-        slug: global,
-        data: {
-          navItems: [],
-        },
-        depth: 0,
-        context: {
-          disableRevalidate: true,
-        },
-      }),
-    ),
-    payload.updateGlobal({
-      slug: 'site-settings',
-      data: {
-        businessName: 'Agency Site',
-        tagline: null,
-        logo: null,
-        favicon: null,
-        contact: {
-          email: null,
-          phone: null,
-          address: null,
-          website: null,
-        },
-        design: {
-          brandColor: '#172033',
-          accentColor: '#c2410c',
-          headingFont: 'Syne',
-          bodyFont: 'Source Sans 3',
-        },
-      },
-      depth: 0,
-      context: {
-        disableRevalidate: true,
-      },
-    }),
-  ])
+  payload.logger.info(`— Clearing collections...`)
 
   await Promise.all(
     collections.map((collection) => payload.db.deleteMany({ collection, req, where: {} })),
@@ -90,9 +46,23 @@ export const seed = async ({
 
   await Promise.all(
     collections
-      .filter((collection) => Boolean(payload.collections[collection].config.versions))
+      .filter((collection) => Boolean(payload.collections[collection]?.config.versions))
       .map((collection) => payload.db.deleteVersions({ collection, req, where: {} })),
   )
+
+  await payload.db.deleteMany({ collection: 'tenants', req, where: {} })
+
+  payload.logger.info(`— Seeding tenant...`)
+
+  const tenant = await payload.create({
+    collection: 'tenants',
+    data: {
+      name: 'Demo Tenant',
+      slug: 'demo',
+      domain: 'localhost',
+      allowPublicRead: true,
+    },
+  })
 
   payload.logger.info(`— Seeding demo author and user...`)
 
@@ -130,26 +100,45 @@ export const seed = async ({
         name: 'Demo Author',
         email: 'demo-author@example.com',
         password: 'password',
+        roles: ['super-admin'],
+        tenants: [
+          {
+            tenant: tenant.id,
+            roles: ['tenant-admin'],
+          },
+        ],
       },
     }),
     payload.create({
       collection: 'media',
-      data: image1,
+      data: {
+        ...image1,
+        tenant: tenant.id,
+      },
       file: image1Buffer,
     }),
     payload.create({
       collection: 'media',
-      data: image2,
+      data: {
+        ...image2,
+        tenant: tenant.id,
+      },
       file: image2Buffer,
     }),
     payload.create({
       collection: 'media',
-      data: image2,
+      data: {
+        ...image2,
+        tenant: tenant.id,
+      },
       file: image3Buffer,
     }),
     payload.create({
       collection: 'media',
-      data: imageHero1,
+      data: {
+        ...imageHero1,
+        tenant: tenant.id,
+      },
       file: hero1Buffer,
     }),
     categories.map((category) =>
@@ -158,6 +147,7 @@ export const seed = async ({
         data: {
           title: category,
           slug: category,
+          tenant: tenant.id,
         },
       }),
     ),
@@ -173,7 +163,10 @@ export const seed = async ({
     context: {
       disableRevalidate: true,
     },
-    data: post1({ heroImage: image1Doc, blockImage: image2Doc, author: demoAuthor }),
+    data: {
+      ...post1({ heroImage: image1Doc, blockImage: image2Doc, author: demoAuthor }),
+      tenant: tenant.id,
+    },
   })
 
   const post2Doc = await payload.create({
@@ -182,7 +175,10 @@ export const seed = async ({
     context: {
       disableRevalidate: true,
     },
-    data: post2({ heroImage: image2Doc, blockImage: image3Doc, author: demoAuthor }),
+    data: {
+      ...post2({ heroImage: image2Doc, blockImage: image3Doc, author: demoAuthor }),
+      tenant: tenant.id,
+    },
   })
 
   const post3Doc = await payload.create({
@@ -191,7 +187,10 @@ export const seed = async ({
     context: {
       disableRevalidate: true,
     },
-    data: post3({ heroImage: image3Doc, blockImage: image1Doc, author: demoAuthor }),
+    data: {
+      ...post3({ heroImage: image3Doc, blockImage: image1Doc, author: demoAuthor }),
+      tenant: tenant.id,
+    },
   })
 
   // update each post with related posts
@@ -222,7 +221,10 @@ export const seed = async ({
   const contactForm = await payload.create({
     collection: 'forms',
     depth: 0,
-    data: contactFormData,
+    data: {
+      ...contactFormData,
+      tenant: tenant.id,
+    },
   })
 
   payload.logger.info(`— Seeding pages...`)
@@ -231,21 +233,28 @@ export const seed = async ({
     payload.create({
       collection: 'pages',
       depth: 0,
-      data: home({ heroImage: imageHomeDoc, metaImage: image2Doc }),
+      data: {
+        ...home({ heroImage: imageHomeDoc, metaImage: image2Doc }),
+        tenant: tenant.id,
+      },
     }),
     payload.create({
       collection: 'pages',
       depth: 0,
-      data: contactPageData({ contactForm: contactForm }),
+      data: {
+        ...contactPageData({ contactForm: contactForm }),
+        tenant: tenant.id,
+      },
     }),
   ])
 
-  payload.logger.info(`— Seeding globals...`)
+  payload.logger.info(`— Seeding tenant globals...`)
 
   await Promise.all([
-    payload.updateGlobal({
-      slug: 'header',
+    payload.create({
+      collection: 'header',
       data: {
+        tenant: tenant.id,
         navItems: [
           {
             link: {
@@ -267,9 +276,10 @@ export const seed = async ({
         ],
       },
     }),
-    payload.updateGlobal({
-      slug: 'footer',
+    payload.create({
+      collection: 'footer',
       data: {
+        tenant: tenant.id,
         navItems: [
           {
             link: {
@@ -297,9 +307,10 @@ export const seed = async ({
         ],
       },
     }),
-    payload.updateGlobal({
-      slug: 'site-settings',
+    payload.create({
+      collection: 'site-settings',
       data: {
+        tenant: tenant.id,
         businessName: 'Payload',
         tagline: 'A modern website for your business',
         logo: imageHomeDoc.id,

@@ -1,16 +1,19 @@
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
+import { multiTenantPlugin } from '@payloadcms/plugin-multi-tenant'
 import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { searchPlugin } from '@payloadcms/plugin-search'
-import { Plugin } from 'payload'
+import type { Plugin } from 'payload'
 import { revalidateRedirects } from '@/hooks/revalidateRedirects'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { searchFields } from '@/search/fieldOverrides'
 import { beforeSyncWithSearch } from '@/search/beforeSync'
+import { isSuperAdmin } from '@/access/isSuperAdmin'
+import { getUserTenantIDs } from '@/utilities/getUserTenantIDs'
 
-import { Page, Post } from '@/payload-types'
+import type { Config, Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
@@ -88,5 +91,36 @@ export const plugins: Plugin[] = [
         return [...defaultFields, ...searchFields]
       },
     },
+  }),
+  // Must come after plugins that register collections (forms, redirects, search)
+  multiTenantPlugin<Config>({
+    collections: {
+      pages: {},
+      posts: {},
+      media: {},
+      categories: {},
+      'site-settings': { isGlobal: true },
+      header: { isGlobal: true },
+      footer: { isGlobal: true },
+      forms: {},
+      'form-submissions': {},
+      redirects: {},
+      search: {},
+    },
+    tenantField: {
+      access: {
+        read: () => true,
+        update: ({ req }) => {
+          if (isSuperAdmin(req.user)) {
+            return true
+          }
+          return getUserTenantIDs(req.user).length > 0
+        },
+      },
+    },
+    tenantsArrayField: {
+      includeDefaultField: false,
+    },
+    userHasAccessToAllTenants: (user) => isSuperAdmin(user),
   }),
 ]
