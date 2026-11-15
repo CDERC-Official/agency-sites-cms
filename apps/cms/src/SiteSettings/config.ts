@@ -1,6 +1,7 @@
-import type { GlobalConfig } from 'payload'
+import type { CollectionConfig } from 'payload'
 
-import { authenticated } from '@/access/authenticated'
+import { anyone } from '@/access/anyone'
+import { superAdminOrTenantAdminAccess } from '@/access/superAdminOrTenantAdmin'
 import { revalidateSiteSettings } from './hooks/revalidateSiteSettings'
 
 const hexColorValidate = (value: string | null | undefined) => {
@@ -11,12 +12,20 @@ const hexColorValidate = (value: string | null | undefined) => {
   )
 }
 
-export const SiteSettings: GlobalConfig = {
+export const SiteSettings: CollectionConfig = {
   slug: 'site-settings',
-  label: 'Site Settings',
+  labels: {
+    singular: 'Site Settings',
+    plural: 'Site Settings',
+  },
   access: {
-    read: () => true,
-    update: authenticated,
+    create: superAdminOrTenantAdminAccess,
+    delete: superAdminOrTenantAdminAccess,
+    read: anyone,
+    update: superAdminOrTenantAdminAccess,
+  },
+  admin: {
+    useAsTitle: 'businessName',
   },
   fields: [
     {

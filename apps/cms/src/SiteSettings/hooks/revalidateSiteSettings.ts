@@ -1,8 +1,8 @@
-import type { GlobalAfterChangeHook } from 'payload'
+import type { CollectionAfterChangeHook } from 'payload'
 
 import { revalidateTag } from 'next/cache'
 
-export const revalidateSiteSettings: GlobalAfterChangeHook = ({
+export const revalidateSiteSettings: CollectionAfterChangeHook = ({
   doc,
   req: { payload, context },
 }) => {

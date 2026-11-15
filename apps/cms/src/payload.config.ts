@@ -8,6 +8,7 @@ import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
+import { Tenants } from './collections/Tenants'
 import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
@@ -87,10 +88,9 @@ export default buildConfig({
       connectionString: postgresConnectionString,
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [Pages, Posts, Media, Categories, Users, Tenants, SiteSettings, Header, Footer],
   //cors: [getServerSideURL()].filter(Boolean),
   cors: ['http://localhost:3000', 'http://localhost:3001'],
-  globals: [SiteSettings, Header, Footer],
   plugins: [...plugins, r2Storage()],
   secret: process.env.PAYLOAD_SECRET || '',
   sharp,
