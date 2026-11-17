@@ -1,20 +1,17 @@
+import { headers as getHeaders } from 'next/headers'
 import React from 'react'
 import type { ServerProps } from 'payload'
 
 import type { Page, Post, User } from '@/payload-types'
+
+import { SeedButton } from '@/components/BeforeDashboard/SeedButton'
+import { getGlobalTenantDocIDs } from '@/utilities/getGlobalTenantDocIDs'
 
 import { OverviewStats, type OverviewStat } from './OverviewStats'
 import { QuickActions } from './QuickActions'
 import { RecentContent, type RecentContentItem } from './RecentContent'
 import { WelcomeHeader } from './WelcomeHeader'
 import './admin.css'
-
-const actions = [
-  { label: 'Create a page', href: '/admin/collections/pages' },
-  { label: 'Upload media', href: '/admin/collections/media' },
-  { label: 'Manage posts', href: '/admin/collections/posts' },
-  { label: 'Site settings', href: '/admin/collections/site-settings' },
-]
 
 function getGreeting(name?: string | null) {
   const hour = new Date().getHours()
@@ -75,6 +72,26 @@ export async function AgencyDashboard({ payload, user }: ServerProps) {
     overrideAccess: false as const,
     user: user as User | undefined,
   }
+
+  const requestHeaders = await getHeaders()
+  const globalDocIDs = await getGlobalTenantDocIDs({
+    headers: requestHeaders,
+    payload,
+    user,
+  })
+
+  const siteSettingsID = globalDocIDs['site-settings']
+  const siteSettingsHref =
+    siteSettingsID != null
+      ? `/admin/collections/site-settings/${siteSettingsID}`
+      : '/admin/collections/site-settings/create'
+
+  const actions = [
+    { label: 'Create a page', href: '/admin/collections/pages' },
+    { label: 'Upload media', href: '/admin/collections/media' },
+    { label: 'Manage posts', href: '/admin/collections/posts' },
+    { label: 'Site settings', href: siteSettingsHref },
+  ]
 
   const [
     publishedPages,
@@ -200,6 +217,15 @@ export async function AgencyDashboard({ payload, user }: ServerProps) {
     <main className="agency-dashboard">
       <WelcomeHeader greeting={getGreeting((user as User | undefined)?.name)} />
       <OverviewStats items={overview} />
+
+      <section className="agency-card agency-dashboard__seed">
+        <h2>Demo content</h2>
+        <p>
+          Load sample pages, posts, media, and a demo tenant (
+          <code>demo.localhost</code>) for local frontend testing.
+        </p>
+        <SeedButton />
+      </section>
 
       <div className="agency-dashboard__columns">
         <RecentContent items={activity} />

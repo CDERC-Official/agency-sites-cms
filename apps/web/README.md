@@ -6,6 +6,10 @@ Copy `.env.example` to `.env.local` for local Nuxt dev. The app uses `NUXT_PUBLI
 
 Requires Node.js 24 (repo `.nvmrc`). Nitro preset is `cloudflare_module`.
 
+## Tenant domains
+
+The Worker resolves the active tenant from the request hostname. For local testing after seeding, open [http://demo.localhost:3001](http://demo.localhost:3001) (seed domain `demo.localhost`). Plain `http://localhost:3001` returns 404. See [local development](../docs/local-development.md#multi-tenant-local-testing).
+
 ## Cloudflare
 
 Full local and deploy steps live in:

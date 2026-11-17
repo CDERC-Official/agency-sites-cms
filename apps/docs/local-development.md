@@ -109,7 +109,7 @@ docker compose up --build
 Compose starts PostgreSQL, waits until it is healthy, runs Payload migrations, and starts both apps with source mounts for hot reload.
 
 - Payload: [http://localhost:3000/admin](http://localhost:3000/admin)
-- Nuxt: [http://localhost:3001](http://localhost:3001)
+- Nuxt (after seed): [http://demo.localhost:3001](http://demo.localhost:3001) — see [Multi-tenant local testing](#multi-tenant-local-testing)
 
 `DATABASE_URL` is set to the Compose `db` service (`postgres://payload:payload@db:5432/agency_sites`). Data persists in a named volume.
 
@@ -184,7 +184,31 @@ Day-to-day hot reload stays `pnpm dev:web` with `apps/web/.env.local`. Use the W
 
 Optional server-only token: `NUXT_PAYLOAD_API_TOKEN`. Public collection reads (published pages/posts, categories) do not require a token.
 
-After the CMS is up, open [http://localhost:3000/admin](http://localhost:3000/admin) and use the **Seed** button (or create content manually) so Nuxt has pages, posts, and categories to display at [http://localhost:3001](http://localhost:3001).
+After the CMS is up, open [http://localhost:3000/admin](http://localhost:3000/admin) and use the **Seed** button (or create content manually) so Nuxt has pages, posts, and categories to display.
+
+---
+
+## Multi-tenant local testing
+
+Nuxt resolves the tenant from the request hostname (port stripped). The seed creates a demo tenant with `domain: demo.localhost`.
+
+1. Run migrations if you have not since this feature landed:
+
+   ```bash
+   pnpm --filter @liskof-digital/cms payload migrate
+   ```
+
+2. Seed from the admin UI (or seed route) so the demo tenant exists.
+
+3. Open the site at **[http://demo.localhost:3001](http://demo.localhost:3001)** — not plain `localhost:3001`.
+
+   - `*.localhost` resolves to loopback on modern OS/browsers; no `/etc/hosts` edit is required.
+   - Host `demo.localhost:3001` matches tenant domain `demo.localhost`.
+   - `http://localhost:3001` returns **404 Unknown tenant** by design.
+
+4. Keep the CMS admin at [http://localhost:3000/admin](http://localhost:3000/admin).
+
+CORS allows `http://demo.localhost:3001` so client-side Payload requests from that origin work.
 
 ---
 
