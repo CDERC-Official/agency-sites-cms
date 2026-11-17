@@ -1,15 +1,25 @@
-import type { CollectionConfig } from 'payload'
+import type { Access, CollectionConfig } from 'payload'
 
 import { isSuperAdminAccess } from '@/access/isSuperAdmin'
 
 import { updateAndDeleteAccess } from './access/updateAndDelete'
+
+const readAccess: Access = ({ req }) => {
+  if (req.user) return true
+
+  return {
+    allowPublicRead: {
+      equals: true,
+    },
+  }
+}
 
 export const Tenants: CollectionConfig = {
   slug: 'tenants',
   access: {
     create: isSuperAdminAccess,
     delete: updateAndDeleteAccess,
-    read: ({ req }) => Boolean(req.user),
+    read: readAccess,
     update: updateAndDeleteAccess,
   },
   admin: {
@@ -24,6 +34,8 @@ export const Tenants: CollectionConfig = {
     {
       name: 'domain',
       type: 'text',
+      unique: true,
+      index: true,
       admin: {
         description: 'Used for domain-based tenant handling',
       },

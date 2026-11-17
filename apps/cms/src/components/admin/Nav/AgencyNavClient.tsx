@@ -7,6 +7,11 @@ import type { NavPreferences, StaticLabel } from 'payload'
 import { formatAdminURL } from 'payload/shared'
 import React, { Fragment } from 'react'
 
+import {
+  GLOBAL_TENANT_COLLECTION_SLUGS,
+  type GlobalTenantDocIDs,
+} from '@/utilities/getGlobalTenantDocIDs'
+
 import { navIcons } from './navIcons'
 
 type NavEntity = {
@@ -21,11 +26,14 @@ type NavGroupItem = {
 }
 
 type AgencyNavClientProps = {
+  globalDocIDs?: GlobalTenantDocIDs
   groups: NavGroupItem[]
   navPreferences?: NavPreferences | null
 }
 
 const baseClass = 'nav'
+
+const globalSlugSet = new Set<string>(GLOBAL_TENANT_COLLECTION_SLUGS)
 
 function resolveLabel(label: StaticLabel): string {
   if (typeof label === 'string') return label
@@ -35,7 +43,24 @@ function resolveLabel(label: StaticLabel): string {
   return ''
 }
 
-export function AgencyNavClient({ groups, navPreferences }: AgencyNavClientProps) {
+function collectionPath(slug: string, globalDocIDs?: GlobalTenantDocIDs): string {
+  if (!globalSlugSet.has(slug)) {
+    return `/collections/${slug}`
+  }
+
+  const docID = globalDocIDs?.[slug as keyof GlobalTenantDocIDs]
+  if (docID != null) {
+    return `/collections/${slug}/${docID}`
+  }
+
+  return `/collections/${slug}/create`
+}
+
+export function AgencyNavClient({
+  globalDocIDs,
+  groups,
+  navPreferences,
+}: AgencyNavClientProps) {
   const pathname = usePathname()
   const {
     config: {
@@ -61,20 +86,25 @@ export function AgencyNavClient({ groups, navPreferences }: AgencyNavClientProps
       {groups.map(({ entities, label }, key) => (
         <NavGroup isOpen={navPreferences?.groups?.[label]?.open} key={key} label={label}>
           {entities.map(({ slug, type, label: entityLabel }, i) => {
-            const href =
+            const path =
               type === EntityType.collection
-                ? formatAdminURL({
-                    adminRoute,
-                    path: `/collections/${slug}`,
-                  })
-                : formatAdminURL({
-                    adminRoute,
-                    path: `/globals/${slug}`,
-                  })
+                ? collectionPath(slug, globalDocIDs)
+                : `/globals/${slug}`
+            const href = formatAdminURL({
+              adminRoute,
+              path,
+            })
             const id =
               type === EntityType.collection ? `nav-${slug}` : `nav-global-${slug}`
-            const isActive =
-              pathname.startsWith(href) && ['/', undefined].includes(pathname[href.length])
+            const collectionRoot = formatAdminURL({
+              adminRoute,
+              path: `/collections/${slug}`,
+            })
+            const isActive = globalSlugSet.has(slug)
+              ? pathname === href ||
+                pathname.startsWith(`${href}/`) ||
+                pathname.startsWith(`${collectionRoot}/`)
+              : pathname.startsWith(href) && ['/', undefined].includes(pathname[href.length])
             const Icon = navIcons[slug]
 
             const Label = (

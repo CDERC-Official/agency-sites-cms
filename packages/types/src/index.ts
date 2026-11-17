@@ -3,6 +3,14 @@ export interface SiteConfig {
   description: string
 }
 
+export interface Tenant {
+  id: number
+  name: string
+  domain?: string | null
+  slug: string
+  allowPublicRead?: boolean | null
+}
+
 export interface PaginatedResult<T> {
   docs: T[]
   totalDocs: number

@@ -2,10 +2,13 @@ import { NavHamburger, NavWrapper } from '@payloadcms/next/client'
 import { Logout } from '@payloadcms/ui'
 import { RenderServerComponent } from '@payloadcms/ui/elements/RenderServerComponent'
 import { EntityType, groupNavItems } from '@payloadcms/ui/shared'
+import { headers as getHeaders } from 'next/headers'
 import type { NavPreferences, Payload, ServerProps, TypedUser } from 'payload'
 import { PREFERENCE_KEYS } from 'payload/shared'
 import { cache } from 'react'
 import React from 'react'
+
+import { getGlobalTenantDocIDs } from '@/utilities/getGlobalTenantDocIDs'
 
 import { AgencyNavClient } from './AgencyNavClient'
 
@@ -91,6 +94,12 @@ export async function AgencyNav(props: ServerProps) {
   )
 
   const navPreferences = await getNavPrefs({ payload, user })
+  const requestHeaders = await getHeaders()
+  const globalDocIDs = await getGlobalTenantDocIDs({
+    headers: requestHeaders,
+    payload,
+    user,
+  })
 
   const sharedServerProps = {
     i18n,
@@ -146,7 +155,11 @@ export async function AgencyNav(props: ServerProps) {
       {RenderedBeforeNav}
       <nav className={`${baseClass}__wrap`}>
         {RenderedBeforeNavLinks}
-        <AgencyNavClient groups={groups} navPreferences={navPreferences} />
+        <AgencyNavClient
+          globalDocIDs={globalDocIDs}
+          groups={groups}
+          navPreferences={navPreferences}
+        />
         {RenderedAfterNavLinks}
         <div className={`${baseClass}__controls`}>{LogoutComponent}</div>
       </nav>

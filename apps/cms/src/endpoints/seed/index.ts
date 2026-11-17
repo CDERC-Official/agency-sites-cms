@@ -50,6 +50,32 @@ export const seed = async ({
       .map((collection) => payload.db.deleteVersions({ collection, req, where: {} })),
   )
 
+  // users_tenants.tenant_id is NOT NULL with ON DELETE SET NULL, so clear
+  // memberships before wiping tenants or Postgres rejects the delete.
+  payload.logger.info(`— Clearing user tenant memberships...`)
+
+  const users = await payload.find({
+    collection: 'users',
+    depth: 0,
+    limit: 1000,
+    pagination: false,
+    overrideAccess: true,
+    req,
+  })
+
+  await Promise.all(
+    users.docs.map((user) =>
+      payload.update({
+        collection: 'users',
+        id: user.id,
+        data: { tenants: [] },
+        depth: 0,
+        overrideAccess: true,
+        req,
+      }),
+    ),
+  )
+
   await payload.db.deleteMany({ collection: 'tenants', req, where: {} })
 
   payload.logger.info(`— Seeding tenant...`)
@@ -59,7 +85,7 @@ export const seed = async ({
     data: {
       name: 'Demo Tenant',
       slug: 'demo',
-      domain: 'localhost',
+      domain: 'demo.localhost',
       allowPublicRead: true,
     },
   })

@@ -7,10 +7,11 @@ import './index.scss'
 
 const SuccessMessage: React.FC = () => (
   <div>
-    Database seeded! You can now{' '}
-    <a target="_blank" href="/">
-      visit your website
-    </a>
+    Database seeded! Open{' '}
+    <a target="_blank" href="http://demo.localhost:3001" rel="noreferrer">
+      http://demo.localhost:3001
+    </a>{' '}
+    to view the demo tenant site.
   </div>
 )
 

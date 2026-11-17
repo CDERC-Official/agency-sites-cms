@@ -1,5 +1,6 @@
 import * as migration_20260922_220023 from './20260922_220023';
 import * as migration_20261109_121743_multi_tenant from './20261109_121743_multi_tenant';
+import * as migration_20261116_tenant_domain_unique from './20261116_tenant_domain_unique';
 
 export const migrations = [
   {
@@ -10,6 +11,11 @@ export const migrations = [
   {
     up: migration_20261109_121743_multi_tenant.up,
     down: migration_20261109_121743_multi_tenant.down,
-    name: '20261109_121743_multi_tenant'
+    name: '20261109_121743_multi_tenant',
   },
-];
+  {
+    up: migration_20261116_tenant_domain_unique.up,
+    down: migration_20261116_tenant_domain_unique.down,
+    name: '20261116_tenant_domain_unique',
+  },
+]

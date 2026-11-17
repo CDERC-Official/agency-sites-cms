@@ -90,7 +90,11 @@ export default buildConfig({
   }),
   collections: [Pages, Posts, Media, Categories, Users, Tenants, SiteSettings, Header, Footer],
   //cors: [getServerSideURL()].filter(Boolean),
-  cors: ['http://localhost:3000', 'http://localhost:3001'],
+  cors: [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://demo.localhost:3001',
+  ],
   plugins: [...plugins, r2Storage()],
   secret: process.env.PAYLOAD_SECRET || '',
   sharp,

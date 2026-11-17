@@ -16,6 +16,19 @@ function buildHeaders(apiToken: string): HeadersInit | undefined {
   }
 }
 
+export function mergeWhere(
+  ...conditions: Array<Record<string, unknown> | undefined | null>
+): Record<string, unknown> | undefined {
+  const parts = conditions.filter(
+    (condition): condition is Record<string, unknown> =>
+      Boolean(condition) && Object.keys(condition as object).length > 0,
+  )
+
+  if (parts.length === 0) return undefined
+  if (parts.length === 1) return parts[0]
+  return { and: parts }
+}
+
 function toSearchParams(query: PayloadQuery = {}): Record<string, string> {
   const params: Record<string, string> = {}
 
@@ -97,11 +110,11 @@ export async function findBySlug<T>(
   const result = await findCollection<T>(collection, {
     ...query,
     limit: 1,
-    where: {
+    where: mergeWhere(query.where, {
       slug: {
         equals: slug,
       },
-    },
+    }),
   })
 
   return result.docs[0] ?? null
