@@ -2,6 +2,8 @@ import type { CollectionSlug, Payload, PayloadRequest, File } from 'payload'
 
 import { contactForm as contactFormData } from './contact-form'
 import { contact as contactPageData } from './contact-page'
+import { event1 } from './event-1'
+import { event2 } from './event-2'
 import { home } from './home'
 import { image1 } from './image-1'
 import { image2 } from './image-2'
@@ -15,6 +17,7 @@ const collections: CollectionSlug[] = [
   'media',
   'pages',
   'posts',
+  'events',
   'forms',
   'form-submissions',
   'search',
@@ -87,6 +90,7 @@ export const seed = async ({
       slug: 'demo',
       domain: 'demo.localhost',
       allowPublicRead: true,
+      enabledCollections: ['events'],
     },
   })
 
@@ -242,6 +246,32 @@ export const seed = async ({
     },
   })
 
+  payload.logger.info(`— Seeding events...`)
+
+  await payload.create({
+    collection: 'events',
+    depth: 0,
+    context: {
+      disableRevalidate: true,
+    },
+    data: {
+      ...event1({ heroImage: image1Doc }),
+      tenant: tenant.id,
+    },
+  })
+
+  await payload.create({
+    collection: 'events',
+    depth: 0,
+    context: {
+      disableRevalidate: true,
+    },
+    data: {
+      ...event2({ heroImage: image2Doc }),
+      tenant: tenant.id,
+    },
+  })
+
   payload.logger.info(`— Seeding contact form...`)
 
   const contactForm = await payload.create({
@@ -287,6 +317,13 @@ export const seed = async ({
               type: 'custom',
               label: 'Posts',
               url: '/posts',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Events',
+              url: '/events',
             },
           },
           {

@@ -1,3 +1,4 @@
+import { getTenantFromCookie } from '@payloadcms/plugin-multi-tenant/utilities'
 import { NavHamburger, NavWrapper } from '@payloadcms/next/client'
 import { Logout } from '@payloadcms/ui'
 import { RenderServerComponent } from '@payloadcms/ui/elements/RenderServerComponent'
@@ -8,7 +9,12 @@ import { PREFERENCE_KEYS } from 'payload/shared'
 import { cache } from 'react'
 import React from 'react'
 
+import { getCollectionIDType } from '@/utilities/getCollectionIDType'
 import { getGlobalTenantDocIDs } from '@/utilities/getGlobalTenantDocIDs'
+import {
+  isOptionalTenantCollection,
+  type OptionalTenantCollectionSlug,
+} from '@/utilities/optionalTenantCollections'
 
 import { AgencyNavClient } from './AgencyNavClient'
 
@@ -39,6 +45,44 @@ const getNavPrefs = cache(
     })
 
     return (result?.docs?.[0]?.value as NavPreferences | undefined) ?? null
+  },
+)
+
+const getEnabledOptionalCollectionsForSelectedTenant = cache(
+  async ({
+    headers,
+    payload,
+    user,
+  }: {
+    headers: Headers
+    payload: Payload
+    user?: TypedUser | null
+  }): Promise<Set<OptionalTenantCollectionSlug>> => {
+    if (!user) return new Set()
+
+    const tenantID = getTenantFromCookie(
+      headers,
+      getCollectionIDType({ payload, collectionSlug: 'tenants' }),
+    )
+
+    if (!tenantID) return new Set()
+
+    try {
+      const tenant = await payload.findByID({
+        id: tenantID,
+        collection: 'tenants',
+        depth: 0,
+        overrideAccess: false,
+        select: { enabledCollections: true },
+        user,
+      })
+
+      return new Set(
+        (tenant.enabledCollections ?? []).filter(isOptionalTenantCollection),
+      )
+    } catch {
+      return new Set()
+    }
   },
 )
 
@@ -74,10 +118,21 @@ export async function AgencyNav(props: ServerProps) {
     globals,
   } = payload.config
 
+  const requestHeaders = await getHeaders()
+  const enabledOptionalCollections = await getEnabledOptionalCollectionsForSelectedTenant({
+    headers: requestHeaders,
+    payload,
+    user,
+  })
+
   const groups = groupNavItems(
     [
       ...collections
         .filter(({ slug }) => visibleEntities.collections.includes(slug))
+        .filter(({ slug }) => {
+          if (!isOptionalTenantCollection(slug)) return true
+          return enabledOptionalCollections.has(slug)
+        })
         .map((collection) => ({
           type: EntityType.collection as const,
           entity: collection,
@@ -94,7 +149,6 @@ export async function AgencyNav(props: ServerProps) {
   )
 
   const navPreferences = await getNavPrefs({ payload, user })
-  const requestHeaders = await getHeaders()
   const globalDocIDs = await getGlobalTenantDocIDs({
     headers: requestHeaders,
     payload,

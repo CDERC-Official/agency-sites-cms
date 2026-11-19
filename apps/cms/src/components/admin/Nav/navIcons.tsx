@@ -3,6 +3,7 @@ import {
   Bars3BottomLeftIcon,
   Bars3Icon,
   BuildingOffice2Icon,
+  CalendarDaysIcon,
   Cog6ToothIcon,
   DocumentTextIcon,
   NewspaperIcon,
@@ -16,6 +17,7 @@ type HeroIcon = ComponentType<SVGProps<SVGSVGElement>>
 export const navIcons: Record<string, HeroIcon> = {
   pages: DocumentTextIcon,
   posts: NewspaperIcon,
+  events: CalendarDaysIcon,
   media: PhotoIcon,
   categories: TagIcon,
   users: UsersIcon,

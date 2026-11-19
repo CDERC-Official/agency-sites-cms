@@ -1,6 +1,7 @@
 import type { Access, CollectionConfig } from 'payload'
 
 import { isSuperAdminAccess } from '@/access/isSuperAdmin'
+import { OPTIONAL_TENANT_COLLECTIONS } from '@/utilities/optionalTenantCollections'
 
 import { updateAndDeleteAccess } from './access/updateAndDelete'
 
@@ -59,6 +60,18 @@ export const Tenants: CollectionConfig = {
       },
       defaultValue: false,
       index: true,
+    },
+    {
+      name: 'enabledCollections',
+      type: 'select',
+      hasMany: true,
+      options: [...OPTIONAL_TENANT_COLLECTIONS],
+      defaultValue: [],
+      admin: {
+        description:
+          'Optional collections available for this tenant. None are enabled by default.',
+        position: 'sidebar',
+      },
     },
   ],
 }

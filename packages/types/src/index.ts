@@ -3,12 +3,24 @@ export interface SiteConfig {
   description: string
 }
 
+export const OPTIONAL_TENANT_COLLECTION_SLUGS = ['events'] as const
+
+export type OptionalTenantCollectionSlug = (typeof OPTIONAL_TENANT_COLLECTION_SLUGS)[number]
+
 export interface Tenant {
   id: number
   name: string
   domain?: string | null
   slug: string
   allowPublicRead?: boolean | null
+  enabledCollections?: OptionalTenantCollectionSlug[] | null
+}
+
+export function tenantHasCollection(
+  tenant: Pick<Tenant, 'enabledCollections'> | null | undefined,
+  slug: OptionalTenantCollectionSlug,
+): boolean {
+  return Boolean(tenant?.enabledCollections?.includes(slug))
 }
 
 export interface PaginatedResult<T> {
@@ -99,6 +111,36 @@ export interface CmsPost {
   content?: LexicalRichText | null
   heroImage?: number | CmsMedia | null
   _status?: ('draft' | 'published') | null
+}
+
+export type CmsEventFrequency = 'daily' | 'weekly' | 'monthly' | 'yearly'
+export type CmsEventEnds = 'never' | 'onDate' | 'afterCount'
+
+export interface CmsEvent {
+  id: number
+  title: string
+  slug: string
+  startDate: string
+  endDate?: string | null
+  allDay?: boolean | null
+  isRecurring?: boolean | null
+  frequency?: CmsEventFrequency | null
+  interval?: number | null
+  ends?: CmsEventEnds | null
+  until?: string | null
+  count?: number | null
+  location?: string | null
+  publishedAt?: string | null
+  meta?: CmsMeta | null
+  content?: LexicalRichText | null
+  heroImage?: number | CmsMedia | null
+  _status?: ('draft' | 'published') | null
+}
+
+export interface CmsEventOccurrence {
+  event: CmsEvent
+  occurrenceStart: Date
+  occurrenceEnd: Date | null
 }
 
 export interface CmsFormFieldOption {
@@ -229,11 +271,41 @@ export interface CmsPage {
   _status?: ('draft' | 'published') | null
 }
 
+export interface CmsNavItem {
+  link: CmsLink
+  id?: string | null
+}
+
+export interface CmsHeader {
+  id: number
+  navItems?: CmsNavItem[] | null
+}
+
+export interface CmsFooter {
+  id: number
+  navItems?: CmsNavItem[] | null
+}
+
+export interface CmsSiteSettings {
+  id: number
+  businessName: string
+  tagline?: string | null
+  logo?: number | CmsMedia | null
+  favicon?: number | CmsMedia | null
+  contact?: {
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    website?: string | null
+  } | null
+}
+
 export interface PayloadQuery {
   depth?: number
   limit?: number
   page?: number
   sort?: string
+  pagination?: boolean
   where?: Record<string, unknown>
   select?: Record<string, boolean | Record<string, unknown>>
 }

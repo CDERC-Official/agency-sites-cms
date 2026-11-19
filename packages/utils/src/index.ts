@@ -6,3 +6,5 @@ export function normalizeBaseUrl(value: string): string {
 export { cn } from './cn'
 export { getCmsHref, getMediaUrl } from './cms'
 export type { CmsLinkFields, CmsLinkReference, CmsMediaLike } from './cms'
+export { expandEventOccurrences } from './events'
+export type { ExpandEventOccurrencesOptions } from './events'

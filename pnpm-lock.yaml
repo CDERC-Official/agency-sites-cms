@@ -244,7 +244,11 @@ importers:
         specifier: ^3.5.0
         version: 3.5.43(typescript@5.9.3)
 
-  packages/utils: {}
+  packages/utils:
+    dependencies:
+      '@liskof-digital/types':
+        specifier: workspace:*
+        version: link:../types
 
 packages:
 
