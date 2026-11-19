@@ -97,6 +97,7 @@ export const plugins: Plugin[] = [
     collections: {
       pages: {},
       posts: {},
+      events: {},
       media: {},
       categories: {},
       'site-settings': { isGlobal: true },

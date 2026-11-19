@@ -5,6 +5,7 @@ import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
+import { Events } from './collections/Events'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
@@ -88,7 +89,18 @@ export default buildConfig({
       connectionString: postgresConnectionString,
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users, Tenants, SiteSettings, Header, Footer],
+  collections: [
+    Pages,
+    Posts,
+    Events,
+    Media,
+    Categories,
+    Users,
+    Tenants,
+    SiteSettings,
+    Header,
+    Footer,
+  ],
   //cors: [getServerSideURL()].filter(Boolean),
   cors: [
     'http://localhost:3000',

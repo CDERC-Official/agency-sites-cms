@@ -36,6 +36,7 @@ function toSearchParams(query: PayloadQuery = {}): Record<string, string> {
   if (query.limit !== undefined) params.limit = String(query.limit)
   if (query.page !== undefined) params.page = String(query.page)
   if (query.sort) params.sort = query.sort
+  if (query.pagination !== undefined) params.pagination = String(query.pagination)
 
   if (query.where) {
     flattenWhere(query.where, 'where', params)

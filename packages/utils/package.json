@@ -5,5 +5,8 @@
     "type":"module",
     "exports":{
         ".":"./src/index.ts"
+    },
+    "dependencies":{
+        "@liskof-digital/types":"workspace:*"
     }
 }
