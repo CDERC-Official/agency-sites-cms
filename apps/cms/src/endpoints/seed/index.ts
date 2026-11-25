@@ -389,6 +389,25 @@ export const seed = async ({
           headingFont: 'Syne',
           bodyFont: 'Source Sans 3',
         },
+        localBusiness: {
+          schemaType: 'LocalBusiness',
+          streetAddress: '123 Main Street',
+          addressLocality: 'City',
+          addressRegion: 'ST',
+          postalCode: '00000',
+          addressCountry: 'US',
+          latitude: 37.7749,
+          longitude: -122.4194,
+          priceRange: '$$',
+          openingHours: [
+            {
+              days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+              opens: '09:00',
+              closes: '17:00',
+            },
+          ],
+          sameAs: [{ url: 'https://payloadcms.com' }],
+        },
       },
     }),
   ])

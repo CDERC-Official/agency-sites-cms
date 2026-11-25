@@ -168,6 +168,192 @@ export const SiteSettings: CollectionConfig = {
             },
           ],
         },
+        {
+          label: 'Local SEO',
+          description:
+            'Structured data for Google LocalBusiness / local pack rich results. Rendered as JSON-LD on every page.',
+          fields: [
+            {
+              name: 'localBusiness',
+              type: 'group',
+              label: 'Local business',
+              fields: [
+                {
+                  name: 'schemaType',
+                  type: 'select',
+                  label: 'Business type',
+                  defaultValue: 'LocalBusiness',
+                  options: [
+                    { label: 'Local business (generic)', value: 'LocalBusiness' },
+                    { label: 'Professional service', value: 'ProfessionalService' },
+                    { label: 'Store', value: 'Store' },
+                    { label: 'Restaurant', value: 'Restaurant' },
+                    { label: 'Medical business', value: 'MedicalBusiness' },
+                    { label: 'Legal service', value: 'LegalService' },
+                    {
+                      label: 'Home & construction',
+                      value: 'HomeAndConstructionBusiness',
+                    },
+                  ],
+                  admin: {
+                    description: 'schema.org @type used in LocalBusiness JSON-LD.',
+                  },
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'streetAddress',
+                      type: 'text',
+                      label: 'Street address',
+                      admin: { width: '50%' },
+                    },
+                    {
+                      name: 'addressLocality',
+                      type: 'text',
+                      label: 'City',
+                      admin: { width: '50%' },
+                    },
+                  ],
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'addressRegion',
+                      type: 'text',
+                      label: 'State / region',
+                      admin: { width: '33%', placeholder: 'CA' },
+                    },
+                    {
+                      name: 'postalCode',
+                      type: 'text',
+                      label: 'Postal code',
+                      admin: { width: '33%' },
+                    },
+                    {
+                      name: 'addressCountry',
+                      type: 'text',
+                      label: 'Country',
+                      admin: {
+                        width: '33%',
+                        placeholder: 'US',
+                        description: 'ISO 3166-1 alpha-2 preferred (e.g. US, GB).',
+                      },
+                    },
+                  ],
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'latitude',
+                      type: 'number',
+                      label: 'Latitude',
+                      admin: { width: '50%', step: 0.000001 },
+                    },
+                    {
+                      name: 'longitude',
+                      type: 'number',
+                      label: 'Longitude',
+                      admin: { width: '50%', step: 0.000001 },
+                    },
+                  ],
+                },
+                {
+                  name: 'priceRange',
+                  type: 'text',
+                  label: 'Price range',
+                  admin: {
+                    placeholder: '$$',
+                    description: 'Relative price, e.g. $, $$, $$$.',
+                  },
+                },
+                {
+                  name: 'openingHours',
+                  type: 'array',
+                  label: 'Opening hours',
+                  labels: {
+                    singular: 'Hours entry',
+                    plural: 'Opening hours',
+                  },
+                  admin: {
+                    description: 'One row per schedule (e.g. weekdays vs weekend).',
+                  },
+                  fields: [
+                    {
+                      name: 'days',
+                      type: 'select',
+                      label: 'Days',
+                      hasMany: true,
+                      required: true,
+                      options: [
+                        { label: 'Monday', value: 'Monday' },
+                        { label: 'Tuesday', value: 'Tuesday' },
+                        { label: 'Wednesday', value: 'Wednesday' },
+                        { label: 'Thursday', value: 'Thursday' },
+                        { label: 'Friday', value: 'Friday' },
+                        { label: 'Saturday', value: 'Saturday' },
+                        { label: 'Sunday', value: 'Sunday' },
+                      ],
+                    },
+                    {
+                      type: 'row',
+                      fields: [
+                        {
+                          name: 'opens',
+                          type: 'text',
+                          label: 'Opens',
+                          required: true,
+                          admin: {
+                            width: '50%',
+                            placeholder: '09:00',
+                            description: '24-hour HH:mm',
+                          },
+                        },
+                        {
+                          name: 'closes',
+                          type: 'text',
+                          label: 'Closes',
+                          required: true,
+                          admin: {
+                            width: '50%',
+                            placeholder: '17:00',
+                            description: '24-hour HH:mm',
+                          },
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  name: 'sameAs',
+                  type: 'array',
+                  label: 'Same as (social / profiles)',
+                  labels: {
+                    singular: 'Profile URL',
+                    plural: 'Profile URLs',
+                  },
+                  admin: {
+                    description:
+                      'Public profile URLs (Google Business, Facebook, LinkedIn, etc.).',
+                  },
+                  fields: [
+                    {
+                      name: 'url',
+                      type: 'text',
+                      label: 'URL',
+                      required: true,
+                      admin: {
+                        placeholder: 'https://',
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       ],
     },
   ],

@@ -914,6 +914,62 @@ export interface SiteSetting {
      */
     bodyFont?: string | null;
   };
+  localBusiness?: {
+    /**
+     * schema.org @type used in LocalBusiness JSON-LD.
+     */
+    schemaType?:
+      | (
+          | 'LocalBusiness'
+          | 'ProfessionalService'
+          | 'Store'
+          | 'Restaurant'
+          | 'MedicalBusiness'
+          | 'LegalService'
+          | 'HomeAndConstructionBusiness'
+        )
+      | null;
+    streetAddress?: string | null;
+    addressLocality?: string | null;
+    addressRegion?: string | null;
+    postalCode?: string | null;
+    /**
+     * ISO 3166-1 alpha-2 preferred (e.g. US, GB).
+     */
+    addressCountry?: string | null;
+    latitude?: number | null;
+    longitude?: number | null;
+    /**
+     * Relative price, e.g. $, $$, $$$.
+     */
+    priceRange?: string | null;
+    /**
+     * One row per schedule (e.g. weekdays vs weekend).
+     */
+    openingHours?:
+      | {
+          days: ('Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday')[];
+          /**
+           * 24-hour HH:mm
+           */
+          opens: string;
+          /**
+           * 24-hour HH:mm
+           */
+          closes: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Public profile URLs (Google Business, Facebook, LinkedIn, etc.).
+     */
+    sameAs?:
+      | {
+          url: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -1658,6 +1714,33 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         accentColor?: T;
         headingFont?: T;
         bodyFont?: T;
+      };
+  localBusiness?:
+    | T
+    | {
+        schemaType?: T;
+        streetAddress?: T;
+        addressLocality?: T;
+        addressRegion?: T;
+        postalCode?: T;
+        addressCountry?: T;
+        latitude?: T;
+        longitude?: T;
+        priceRange?: T;
+        openingHours?:
+          | T
+          | {
+              days?: T;
+              opens?: T;
+              closes?: T;
+              id?: T;
+            };
+        sameAs?:
+          | T
+          | {
+              url?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
