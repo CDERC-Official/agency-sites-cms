@@ -29,6 +29,9 @@ export async function fetchTenantByDomain(
       'select[slug]': 'true',
       'select[allowPublicRead]': 'true',
       'select[enabledCollections]': 'true',
+      'select[enabledLocales]': 'true',
+      'select[defaultLocale]': 'true',
+      'select[showLanguageSwitcher]': 'true',
     },
   })
 

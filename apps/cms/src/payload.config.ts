@@ -84,6 +84,14 @@ export default buildConfig({
   },
   // This config helps us configure global or default features that the other editors can inherit
   editor: defaultLexical,
+  localization: {
+    locales: [
+      { code: 'fr', label: 'Français' },
+      { code: 'de', label: 'Deutsch' },
+    ],
+    defaultLocale: 'fr',
+    fallback: true,
+  },
   db: postgresAdapter({
     pool: {
       connectionString: postgresConnectionString,

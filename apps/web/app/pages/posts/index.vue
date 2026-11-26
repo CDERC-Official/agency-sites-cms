@@ -1,7 +1,12 @@
 <script setup lang="ts">
 const { getPosts } = usePayload()
+const { locale } = useLocale()
 
-const { data, error, pending } = await useAsyncData('posts-list', () => getPosts())
+const { data, error, pending } = await useAsyncData(
+  () => `posts-list-${locale.value}`,
+  () => getPosts(),
+  { watch: [locale] },
+)
 
 useSeoMeta({
   title: 'Posts',

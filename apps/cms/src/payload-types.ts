@@ -118,10 +118,10 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: null;
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('fr' | 'de') | ('fr' | 'de')[];
   globals: {};
   globalsSelect: {};
-  locale: null;
+  locale: 'fr' | 'de';
   widgets: {
     collections: CollectionsWidget;
   };
@@ -248,6 +248,18 @@ export interface Tenant {
    * Optional collections available for this tenant. None are enabled by default.
    */
   enabledCollections?: 'events'[] | null;
+  /**
+   * Locales available for this tenant. Must be a subset of the platform catalog.
+   */
+  enabledLocales: ('fr' | 'de')[];
+  /**
+   * Fallback locale for this tenant. Must be one of the enabled locales.
+   */
+  defaultLocale: 'fr' | 'de';
+  /**
+   * Show the language switcher on the frontend. Only appears when two or more locales are enabled.
+   */
+  showLanguageSwitcher?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1686,6 +1698,9 @@ export interface TenantsSelect<T extends boolean = true> {
   slug?: T;
   allowPublicRead?: T;
   enabledCollections?: T;
+  enabledLocales?: T;
+  defaultLocale?: T;
+  showLanguageSwitcher?: T;
   updatedAt?: T;
   createdAt?: T;
 }

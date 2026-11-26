@@ -1,5 +1,12 @@
 <script setup lang="ts">
 const { data } = await useSiteChrome()
+const { locale } = useLocale()
+
+useHead({
+  htmlAttrs: {
+    lang: locale,
+  },
+})
 
 useLocalBusinessJsonLd(() => data.value?.siteSettings)
 </script>

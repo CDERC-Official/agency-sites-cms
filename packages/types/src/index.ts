@@ -7,6 +7,25 @@ export const OPTIONAL_TENANT_COLLECTION_SLUGS = ['events'] as const
 
 export type OptionalTenantCollectionSlug = (typeof OPTIONAL_TENANT_COLLECTION_SLUGS)[number]
 
+export type CmsLocale = 'fr' | 'de'
+
+export const CMS_LOCALES: readonly CmsLocale[] = ['fr', 'de'] as const
+export const DEFAULT_CMS_LOCALE: CmsLocale = 'fr'
+
+export const CMS_LOCALE_OPTIONS = [
+  { label: 'Français', value: 'fr' },
+  { label: 'Deutsch', value: 'de' },
+] as const satisfies ReadonlyArray<{ label: string; value: CmsLocale }>
+
+export const CMS_LOCALE_LABELS: Record<CmsLocale, string> = {
+  fr: 'FR',
+  de: 'DE',
+}
+
+export function isCmsLocale(value: unknown): value is CmsLocale {
+  return value === 'fr' || value === 'de'
+}
+
 export interface Tenant {
   id: number
   name: string
@@ -14,6 +33,9 @@ export interface Tenant {
   slug: string
   allowPublicRead?: boolean | null
   enabledCollections?: OptionalTenantCollectionSlug[] | null
+  enabledLocales?: CmsLocale[] | null
+  defaultLocale?: CmsLocale | null
+  showLanguageSwitcher?: boolean | null
 }
 
 export function tenantHasCollection(
@@ -349,6 +371,8 @@ export interface PayloadQuery {
   page?: number
   sort?: string
   pagination?: boolean
+  locale?: CmsLocale | 'all'
+  fallbackLocale?: CmsLocale | false
   where?: Record<string, unknown>
   select?: Record<string, boolean | Record<string, unknown>>
 }

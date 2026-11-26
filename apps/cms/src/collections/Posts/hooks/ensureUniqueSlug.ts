@@ -29,8 +29,17 @@ export const ensureUniqueSlug: FieldHook = async ({ data, originalDoc, req, valu
     })
   }
 
+  if (originalDoc?.id) {
+    constraints.push({
+      id: {
+        not_equals: originalDoc.id,
+      },
+    })
+  }
+
   const findDuplicatePosts = await req.payload.find({
     collection: 'posts',
+    locale: req.locale,
     where: {
       and: constraints,
     },

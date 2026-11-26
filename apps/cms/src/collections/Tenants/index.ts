@@ -1,6 +1,12 @@
 import type { Access, CollectionConfig } from 'payload'
 
 import { isSuperAdminAccess } from '@/access/isSuperAdmin'
+import {
+  CMS_LOCALE_OPTIONS,
+  DEFAULT_CMS_LOCALE,
+  isCmsLocale,
+  type CmsLocale,
+} from '@/utilities/cmsLocales'
 import { OPTIONAL_TENANT_COLLECTIONS } from '@/utilities/optionalTenantCollections'
 
 import { updateAndDeleteAccess } from './access/updateAndDelete'
@@ -70,6 +76,56 @@ export const Tenants: CollectionConfig = {
       admin: {
         description:
           'Optional collections available for this tenant. None are enabled by default.',
+        position: 'sidebar',
+      },
+    },
+    {
+      // Must not be named `locales` — that creates `tenants_locales`, which collides with
+      // Payload/Drizzle's localization table suffix (`_locales`) and crashes queries.
+      name: 'enabledLocales',
+      type: 'select',
+      hasMany: true,
+      options: [...CMS_LOCALE_OPTIONS],
+      defaultValue: [DEFAULT_CMS_LOCALE],
+      required: true,
+      admin: {
+        description: 'Locales available for this tenant. Must be a subset of the platform catalog.',
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'defaultLocale',
+      type: 'select',
+      options: [...CMS_LOCALE_OPTIONS],
+      defaultValue: DEFAULT_CMS_LOCALE,
+      required: true,
+      admin: {
+        description: 'Fallback locale for this tenant. Must be one of the enabled locales.',
+        position: 'sidebar',
+      },
+      validate: (
+        value: unknown,
+        { data }: { data: { enabledLocales?: CmsLocale[] | null } },
+      ) => {
+        if (!isCmsLocale(value)) {
+          return 'Default locale is required'
+        }
+
+        const enabled = data?.enabledLocales
+        if (Array.isArray(enabled) && enabled.length > 0 && !enabled.includes(value)) {
+          return 'Default locale must be one of the enabled locales'
+        }
+
+        return true
+      },
+    },
+    {
+      name: 'showLanguageSwitcher',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description:
+          'Show the language switcher on the frontend. Only appears when two or more locales are enabled.',
         position: 'sidebar',
       },
     },

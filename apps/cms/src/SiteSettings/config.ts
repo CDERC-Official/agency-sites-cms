@@ -38,11 +38,13 @@ export const SiteSettings: CollectionConfig = {
               name: 'businessName',
               type: 'text',
               required: true,
+              localized: true,
               label: 'Business name',
             },
             {
               name: 'tagline',
               type: 'text',
+              localized: true,
               label: 'Tagline',
               admin: {
                 description: 'Short line shown under the business name where used.',

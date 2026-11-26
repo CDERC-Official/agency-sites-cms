@@ -91,6 +91,9 @@ export const seed = async ({
       domain: 'demo.localhost',
       allowPublicRead: true,
       enabledCollections: ['events'],
+      enabledLocales: ['fr', 'de'],
+      defaultLocale: 'fr',
+      showLanguageSwitcher: true,
     },
   })
 

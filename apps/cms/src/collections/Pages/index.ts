@@ -60,6 +60,7 @@ export const Pages: CollectionConfig<'pages'> = {
       name: 'title',
       type: 'text',
       required: true,
+      localized: true,
     },
     {
       type: 'tabs',
@@ -119,6 +120,7 @@ export const Pages: CollectionConfig<'pages'> = {
       },
     },
     slugField({
+      localized: true,
       disableUnique: true,
       overrides: (field: RowField) => {
         const slug = field.fields.find(
