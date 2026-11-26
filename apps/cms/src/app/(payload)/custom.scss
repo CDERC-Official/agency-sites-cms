@@ -1,6 +1,9 @@
 @import '../../../../../packages/design-system/src/admin-tokens.css';
 
 :root {
+  --agency-primary: #2f5d73;
+  --agency-primary-hover: #244958;
+
   --theme-bg: var(--admin-background);
   --theme-input-bg: var(--admin-surface);
   --theme-text: var(--admin-text);
@@ -180,6 +183,27 @@ body {
   --bg-color: var(--admin-primary);
   --hover-bg: var(--admin-primary-hover);
   --hover-color: #fff;
+}
+
+.agency-button,
+.list-create-new-doc__create-new-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--agency-primary);
+  color: white !important;
+  border-radius: 8px;
+  padding: 12px 18px;
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover,
+  &:focus,
+  &:focus-visible,
+  &:active {
+    background: var(--agency-primary-hover);
+    color: white !important;
+  }
 }
 
 .btn--style-secondary {

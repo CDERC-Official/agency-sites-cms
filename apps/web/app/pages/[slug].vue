@@ -13,10 +13,11 @@ if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found' })
 }
 
-useSeoMeta({
-  title: page.value.meta?.title || page.value.title,
-  description: page.value.meta?.description || undefined,
-})
+useCmsSeoMeta(() =>
+  page.value
+    ? { meta: page.value.meta, title: page.value.title, ogType: 'website' }
+    : null,
+)
 </script>
 
 <template>

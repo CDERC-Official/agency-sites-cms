@@ -1,5 +1,7 @@
 <script setup lang="ts">
 const { data } = await useSiteChrome()
+
+useLocalBusinessJsonLd(() => data.value?.siteSettings)
 </script>
 
 <template>

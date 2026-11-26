@@ -286,6 +286,24 @@ export interface CmsFooter {
   navItems?: CmsNavItem[] | null
 }
 
+export type CmsLocalBusinessSchemaType =
+  | 'LocalBusiness'
+  | 'ProfessionalService'
+  | 'Store'
+  | 'Restaurant'
+  | 'MedicalBusiness'
+  | 'LegalService'
+  | 'HomeAndConstructionBusiness'
+
+export type CmsDayOfWeek =
+  | 'Monday'
+  | 'Tuesday'
+  | 'Wednesday'
+  | 'Thursday'
+  | 'Friday'
+  | 'Saturday'
+  | 'Sunday'
+
 export interface CmsSiteSettings {
   id: number
   businessName: string
@@ -297,6 +315,31 @@ export interface CmsSiteSettings {
     phone?: string | null
     address?: string | null
     website?: string | null
+  } | null
+  localBusiness?: {
+    schemaType?: CmsLocalBusinessSchemaType | null
+    streetAddress?: string | null
+    addressLocality?: string | null
+    addressRegion?: string | null
+    postalCode?: string | null
+    addressCountry?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    priceRange?: string | null
+    openingHours?:
+      | {
+          days: CmsDayOfWeek[]
+          opens: string
+          closes: string
+          id?: string | null
+        }[]
+      | null
+    sameAs?:
+      | {
+          url: string
+          id?: string | null
+        }[]
+      | null
   } | null
 }
 

@@ -74,21 +74,6 @@
     letter-spacing: 0.1em;
   }
   
-  .agency-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--agency-primary);
-    color: white !important;
-    border-radius: 8px;
-    padding: 12px 18px;
-    font-weight: 600;
-  }
-  
-  .agency-button:hover {
-    background: var(--agency-primary-hover);
-  }
-  
   .agency-dashboard__stats {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));

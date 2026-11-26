@@ -1,6 +1,6 @@
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'payload'
 
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidatePath } from 'next/cache'
 
 import type { Event } from '../../../payload-types'
 
@@ -17,7 +17,6 @@ export const revalidateEvent: CollectionAfterChangeHook<Event> = ({
 
       revalidatePath(path)
       revalidatePath('/events')
-      revalidateTag('events-sitemap', 'max')
     }
 
     if (previousDoc._status === 'published' && doc._status !== 'published') {
@@ -27,7 +26,6 @@ export const revalidateEvent: CollectionAfterChangeHook<Event> = ({
 
       revalidatePath(oldPath)
       revalidatePath('/events')
-      revalidateTag('events-sitemap', 'max')
     }
   }
   return doc
@@ -42,7 +40,6 @@ export const revalidateDelete: CollectionAfterDeleteHook<Event> = ({
 
     revalidatePath(path)
     revalidatePath('/events')
-    revalidateTag('events-sitemap', 'max')
   }
 
   return doc

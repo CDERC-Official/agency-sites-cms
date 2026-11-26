@@ -16,7 +16,12 @@ export const readAccess: Access = ({ req, id }) => {
     return true
   }
 
-  const superAdmin = isSuperAdmin(req.user)
+  // Super admins manage every account, including users on other tenants and
+  // users with no tenant. The selected-tenant cookie must not hide them.
+  if (isSuperAdmin(req.user)) {
+    return true
+  }
+
   const selectedTenant = getTenantFromCookie(
     req.headers,
     getCollectionIDType({ payload: req.payload, collectionSlug: 'tenants' }),
@@ -25,17 +30,13 @@ export const readAccess: Access = ({ req, id }) => {
 
   if (selectedTenant) {
     const hasTenantAccess = adminTenantAccessIDs.some((tenantID) => tenantID === selectedTenant)
-    if (superAdmin || hasTenantAccess) {
+    if (hasTenantAccess) {
       return {
         'tenants.tenant': {
           equals: selectedTenant,
         },
       }
     }
-  }
-
-  if (superAdmin) {
-    return true
   }
 
   return {

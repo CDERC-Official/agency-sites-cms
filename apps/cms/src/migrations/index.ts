@@ -1,6 +1,7 @@
 import * as migration_20260922_220023 from './20260922_220023';
 import * as migration_20261109_121743_multi_tenant from './20261109_121743_multi_tenant';
 import * as migration_20261116_tenant_domain_unique from './20261116_tenant_domain_unique';
+import * as migration_20261125_225329_local_business_jsonld from './20261125_225329_local_business_jsonld';
 
 export const migrations = [
   {
@@ -18,4 +19,9 @@ export const migrations = [
     down: migration_20261116_tenant_domain_unique.down,
     name: '20261116_tenant_domain_unique',
   },
-]
+  {
+    up: migration_20261125_225329_local_business_jsonld.up,
+    down: migration_20261125_225329_local_business_jsonld.down,
+    name: '20261125_225329_local_business_jsonld'
+  },
+];

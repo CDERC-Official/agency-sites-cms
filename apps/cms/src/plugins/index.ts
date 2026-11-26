@@ -122,6 +122,10 @@ export const plugins: Plugin[] = [
     tenantsArrayField: {
       includeDefaultField: false,
     },
+    // The plugin list filter always scopes users to the selected tenant, which
+    // hides every other user from super admins. Read access already scopes
+    // tenant admins.
+    useUsersTenantFilter: false,
     userHasAccessToAllTenants: (user) => isSuperAdmin(user),
   }),
 ]
