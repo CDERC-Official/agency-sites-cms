@@ -4,12 +4,17 @@ import { expandEventOccurrences } from '@liskof-digital/utils'
 
 const { tenant } = useTenant()
 const { getEvents } = usePayload()
+const { locale } = useLocale()
 
 if (!tenantHasCollection(tenant.value, 'events')) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found' })
 }
 
-const { data, error, pending } = await useAsyncData('events-list', () => getEvents())
+const { data, error, pending } = await useAsyncData(
+  () => `events-list-${locale.value}`,
+  () => getEvents(),
+  { watch: [locale] },
+)
 
 const occurrences = computed(() => {
   const docs = data.value?.docs ?? []

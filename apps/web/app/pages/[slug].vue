@@ -2,11 +2,12 @@
 const route = useRoute()
 const slug = computed(() => String(route.params.slug))
 const { getPageBySlug } = usePayload()
+const { locale } = useLocale()
 
 const { data: page } = await useAsyncData(
-  () => `page-${slug.value}`,
+  () => `page-${locale.value}-${slug.value}`,
   () => getPageBySlug(slug.value),
-  { watch: [slug] },
+  { watch: [slug, locale] },
 )
 
 if (!page.value) {

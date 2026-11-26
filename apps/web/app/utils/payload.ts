@@ -37,6 +37,11 @@ function toSearchParams(query: PayloadQuery = {}): Record<string, string> {
   if (query.page !== undefined) params.page = String(query.page)
   if (query.sort) params.sort = query.sort
   if (query.pagination !== undefined) params.pagination = String(query.pagination)
+  if (query.locale) params.locale = query.locale
+  if (query.fallbackLocale !== undefined) {
+    params.fallbackLocale =
+      query.fallbackLocale === false ? 'false' : query.fallbackLocale
+  }
 
   if (query.where) {
     flattenWhere(query.where, 'where', params)

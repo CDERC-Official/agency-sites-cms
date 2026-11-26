@@ -14,6 +14,7 @@ const props = defineProps<{
 }>()
 
 const { getPosts } = usePayload()
+const { locale } = useLocale()
 
 const categoryIds = computed(() =>
   (props.categories || [])
@@ -22,7 +23,8 @@ const categoryIds = computed(() =>
 )
 
 const { data: posts } = await useAsyncData(
-  () => `archive-${props.id || 'block'}-${props.populateBy}-${props.limit}-${categoryIds.value.join(',')}`,
+  () =>
+    `archive-${locale.value}-${props.id || 'block'}-${props.populateBy}-${props.limit}-${categoryIds.value.join(',')}`,
   async () => {
     if (props.populateBy === 'selection') {
       return (props.selectedDocs || [])
@@ -54,6 +56,7 @@ const { data: posts } = await useAsyncData(
 
     return result.docs
   },
+  { watch: [locale] },
 )
 </script>
 

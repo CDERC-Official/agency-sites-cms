@@ -71,6 +71,7 @@ export const Posts: CollectionConfig<'posts'> = {
       name: 'title',
       type: 'text',
       required: true,
+      localized: true,
     },
     {
       type: 'tabs',
@@ -85,6 +86,7 @@ export const Posts: CollectionConfig<'posts'> = {
             {
               name: 'content',
               type: 'richText',
+              localized: true,
               editor: lexicalEditor({
                 features: ({ rootFeatures }) => {
                   return [
@@ -216,6 +218,7 @@ export const Posts: CollectionConfig<'posts'> = {
       ],
     },
     slugField({
+      localized: true,
       disableUnique: true,
       overrides: (field) => {
         const slug = field.fields.find(

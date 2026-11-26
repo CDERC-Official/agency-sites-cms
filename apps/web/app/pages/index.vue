@@ -4,6 +4,7 @@ import { normalizeBaseUrl } from '@liskof-digital/utils'
 
 const config = useRuntimeConfig()
 const { getPages, getPosts, getCategories } = usePayload()
+const { locale } = useLocale()
 
 const site: SiteConfig = {
   name: 'Liskof Digital',
@@ -11,19 +12,23 @@ const site: SiteConfig = {
 }
 const cmsUrl = normalizeBaseUrl(config.public.payloadUrl)
 
-const { data, error, pending } = await useAsyncData('home-collections', async () => {
-  const [pages, posts, categories] = await Promise.all([
-    getPages(),
-    getPosts(),
-    getCategories(),
-  ])
+const { data, error, pending } = await useAsyncData(
+  () => `home-collections-${locale.value}`,
+  async () => {
+    const [pages, posts, categories] = await Promise.all([
+      getPages(),
+      getPosts(),
+      getCategories(),
+    ])
 
-  return {
-    pages: pages.docs,
-    posts: posts.docs,
-    categories: categories.docs,
-  }
-})
+    return {
+      pages: pages.docs,
+      posts: posts.docs,
+      categories: categories.docs,
+    }
+  },
+  { watch: [locale] },
+)
 </script>
 
 <template>

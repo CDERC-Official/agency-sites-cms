@@ -6,15 +6,16 @@ const route = useRoute()
 const slug = computed(() => String(route.params.slug))
 const { tenant } = useTenant()
 const { getEventBySlug } = usePayload()
+const { locale } = useLocale()
 
 if (!tenantHasCollection(tenant.value, 'events')) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found' })
 }
 
 const { data: event } = await useAsyncData(
-  () => `event-${slug.value}`,
+  () => `event-${locale.value}-${slug.value}`,
   () => getEventBySlug(slug.value),
-  { watch: [slug] },
+  { watch: [slug, locale] },
 )
 
 if (!event.value) {

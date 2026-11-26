@@ -76,6 +76,7 @@ export const Events: CollectionConfig<'events'> = {
       name: 'title',
       type: 'text',
       required: true,
+      localized: true,
     },
     {
       type: 'tabs',
@@ -91,6 +92,7 @@ export const Events: CollectionConfig<'events'> = {
             {
               name: 'content',
               type: 'richText',
+              localized: true,
               editor: lexicalEditor({
                 features: ({ rootFeatures }) => {
                   return [
@@ -275,6 +277,7 @@ export const Events: CollectionConfig<'events'> = {
       },
     },
     slugField({
+      localized: true,
       disableUnique: true,
       overrides: (field) => {
         const slug = field.fields.find(

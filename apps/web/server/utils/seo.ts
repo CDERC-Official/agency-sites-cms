@@ -1,6 +1,6 @@
 import type { H3Event } from 'h3'
 import type { Tenant } from '@liskof-digital/types'
-import { tenantHasCollection } from '@liskof-digital/types'
+import { DEFAULT_CMS_LOCALE, tenantHasCollection } from '@liskof-digital/types'
 import { findCollection, mergeWhere } from '../../app/utils/payload'
 
 export type SitemapEntry = {
@@ -36,6 +36,7 @@ async function fetchPublishedSlugs(
     depth: 0,
     limit: 1000,
     pagination: false,
+    locale: DEFAULT_CMS_LOCALE,
     select: {
       slug: true,
       updatedAt: true,

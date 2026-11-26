@@ -8,6 +8,7 @@ import type {
   CmsSiteSettings,
   PayloadQuery,
 } from '@liskof-digital/types'
+import { DEFAULT_CMS_LOCALE } from '@liskof-digital/types'
 import { findBySlug, findCollection, mergeWhere } from '~/utils/payload'
 
 const listSelect = {
@@ -51,13 +52,19 @@ const pageDetailSelect = {
 
 export function usePayload() {
   const { tenantId } = useTenant()
+  const { locale } = useLocale()
 
   function scopedQuery(query: PayloadQuery = {}): PayloadQuery {
-    if (!tenantId.value) return query
+    const withLocale: PayloadQuery = {
+      locale: locale.value || DEFAULT_CMS_LOCALE,
+      ...query,
+    }
+
+    if (!tenantId.value) return withLocale
 
     return {
-      ...query,
-      where: mergeWhere(query.where, {
+      ...withLocale,
+      where: mergeWhere(withLocale.where, {
         tenant: {
           equals: tenantId.value,
         },
