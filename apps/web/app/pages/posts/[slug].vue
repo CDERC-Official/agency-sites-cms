@@ -13,10 +13,11 @@ if (!post.value) {
   throw createError({ statusCode: 404, statusMessage: 'Post not found' })
 }
 
-useSeoMeta({
-  title: post.value.meta?.title || post.value.title,
-  description: post.value.meta?.description || undefined,
-})
+useCmsSeoMeta(() =>
+  post.value
+    ? { meta: post.value.meta, title: post.value.title, ogType: 'article' }
+    : null,
+)
 </script>
 
 <template>

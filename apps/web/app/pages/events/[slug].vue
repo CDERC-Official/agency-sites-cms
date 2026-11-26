@@ -72,10 +72,11 @@ function formatDate(value: string | Date, allDay?: boolean | null) {
   })
 }
 
-useSeoMeta({
-  title: event.value.meta?.title || event.value.title,
-  description: event.value.meta?.description || undefined,
-})
+useCmsSeoMeta(() =>
+  event.value
+    ? { meta: event.value.meta, title: event.value.title, ogType: 'article' }
+    : null,
+)
 </script>
 
 <template>
